@@ -1,36 +1,38 @@
-## Componentes SAPS
+# SAPS
 * Verifique de estar usando Ubuntu 16.04 ou 18.04
-0. [Common](#〰-common)
-1. [Catalog](#〰-catalog)
-2. [Archiver](#〰-archiver)
-3. [Dispatcher](#〰-dispatcher)
-4. [Scheduler](#〰-scheduler)
-5. [Dashboard](#〰-dashboard)
-6. [Arrebol](#〰-arrebol)
-    1. [Clean Option](#clean-option)
-    2. [Container Option](#container-option)
-7. [Worker (arrebol)](#arrebol)
-8. Atachando volume ao nfs
-9. Testes NOP
 
+
+# Componentes SAPS
+1. [Common](#〰-common)
+1. [Catalog](#〰-catalog)
+1. [Archiver](#〰-archiver)
+1. [Dispatcher](#〰-dispatcher)
+1. [Scheduler](#〰-scheduler)
+1. [Dashboard](#〰-dashboard)
+1. [Arrebol](#〰-arrebol)
+    1. [Clean Option](#clean-option)
+    1. [Container Option](#container-option)
+1. [Worker (arrebol)](#arrebol)
+1. [Atachando volume ao nfs](#〰-Atachando-volume)
+1. [Testes NOP](#Testes-NOP)
 
 -------------------------------------------------------------------
-## 〰 Common
+## 〰 [Common](https://github.com/ufcg-lsd/saps-common)
 * Esse repositório é necessário para:
-    1. [Catalog](##catalog)
-    2. [Archiver](##archiver)
-    3. [Dispatcher](##dispatcher)
-    4. [Scheduler](##scheduler)
+    1. [Catalog](#〰-catalog)
+    2. [Archiver](#〰-archiver)
+    3. [Dispatcher](#〰-dispatcher)
+    4. [Scheduler](#〰-scheduler)
 
 ### Instalação:
-1. Instalar JDK, Maven, Git
+1. Instale o JDK, Maven, Git
     ```
     sudo apt-get update
     sudo apt-get -y install openjdk-8-jdk
     sudo apt-get -y install maven
     sudo apt-get -y install git
     ```
-2. Clonar e  instalar dependencias
+2. Clone e instale as dependencias
     ```
     git clone https://github.com/ufcg-lsd/saps-common ~/saps-common
     cd ~/saps-common
@@ -38,7 +40,7 @@
     ```
 
 -------------------------------------------------------------------
-## 〰 Catalog
+## 〰 [Catalog](https://github.com/ufcg-lsd/saps-catalog)
 ### Variaveis a serem definidas:
 * $catalog_user         (default = catalog_user)
 * $catalog_passwd       (default = catalog_passwd)
@@ -46,25 +48,25 @@
 * $installed_version
 
 ### Instalação:
-1. Configurar o [saps-common](##common)
-2. Clonar e instalar dependencias
+1. Configure o [saps-common](#〰-common)
+2. Clone e instale as dependencias
     ```
     git clone https://github.com/ufcg-lsd/saps-catalog ~/saps-catalog
     cd ~/saps-catalog
     sudo mvn install 
     ```
-3. Instalar o postgres
+3. Instale o postgres
     ``` 
     sudo apt-get install -y postgresql
     ```
-4. Configurar o Catalog
+4. Configure o Catalog
     ``` 
     sudo su postgres
     psql -c "CREATE USER $catalog_user WITH PASSWORD '$catalog_passwd';"
     psql -c "CREATE DATABASE $catalog_db_name OWNER $catalog_user;"
     psql -c "GRANT ALL PRIVILEGES ON DATABASE $catalog_db_name TO $catalog_user;"
     ```
-5. Configurar PostgreSQL
+5. Configure o PostgreSQL
     * Verifique a versão **<installed_version>** do postgres com o comando:
         ```
         ls /etc/postgresql 
@@ -85,26 +87,26 @@
     ```
 
 -------------------------------------------------------------------
-## 〰 Archiver
+## 〰 [Archiver](https://github.com/ufcg-lsd/saps-archiver)
 ### Variaveis a serem definidas:
 * $nfs_server_folder_path   (default= /nfs)
 
 ### Instalação:
-1. Configurar o [saps-common](##common)
-2. Instalar dependencias do [saps-catalog](##catalog)
+1. Configure o [saps-common](#〰-common)
+2. Instale as dependencias do [saps-catalog](#〰-catalog)
     ```
     git clone https://github.com/ufcg-lsd/saps-catalog ~/saps-catalog
     cd ~/saps-catalog
     mvn install 
     rm -rf ~/saps-catalog
     ```
-3. Configurar o [saps-archiver](##archiver)
+3. Clone e instale as dependencias
     ```
     git clone https://github.com/ufcg-lsd/saps-archiver ~/saps-archiver
     cd ~/saps-archiver
     sudo mvn install 
     ```
-4. Configurar servidor
+4. Configure o servidor
 * NFS (Opção 1)
     * Configurando
         ```
@@ -124,7 +126,7 @@
     TODO
     ```
 
-5. Instalando apache
+5. Instale o apache
     ```
     sudo apt-get install -y apache2
 
@@ -166,23 +168,23 @@ Configure o arquivo /config/archiver.conf de acordo com os outros componentes
     ```
 
 ------------------------------------------------------------------
-## 〰 Dispatcher
+## 〰 [Dispatcher](https://github.com/ufcg-lsd/saps-dispatcher)
 ### Instalação:
-1. Configurar o [saps-common](##common)
-2. Instalar dependencias do [saps-catalog](##catalog)
+1. Configure o [saps-common](#〰-common)
+2. Instale as dependencias do [saps-catalog](#〰-catalog)
     ```
     git clone https://github.com/ufcg-lsd/saps-catalog ~/saps-catalog
     cd ~/saps-catalog
     mvn install 
     rm -rf ~/saps-catalog
     ```
-3. Configurar o [saps-dispatcher](##dispatcher)
+3. Clone e instale as dependencias
     ```
     git clone https://github.com/ufcg-lsd/saps-dispatcher ~/saps-dispatcher
     cd ~/saps-dispatcher
     sudo mvn install 
     ```
-4. Instalar dependências do script python (get_wrs.py)
+4. Instale as dependências do script python (get_wrs.py)
     ```
     sudo apt-get install -y python-gdal
     sudo apt-get install -y python-shapely
@@ -205,17 +207,17 @@ Configure o arquivo **/config/dispatcher.conf** de acordo com os outros componen
     ```
 
 -------------------------------------------------------------------
-## 〰 Scheduler
+## 〰 [Scheduler](https://github.com/ufcg-lsd/saps-scheduler)
 ### Instalação:
-1. Configurar o [saps-common](##common)
-2. Instalar dependencias do [saps-catalog](##catalog)
+1. Configure o [saps-common](#〰-common)
+2. Instale as dependencias do [saps-catalog](#〰-catalog)
     ```
     git clone https://github.com/ufcg-lsd/saps-catalog ~/saps-catalog
     cd ~/saps-catalog
     mvn install 
     rm -rf ~/saps-catalog
     ```
-3. Configurar o [saps-scheduler](##scheduler)
+3. Clone e instale as dependencias
     ```
     git clone https://github.com/ufcg-lsd/saps-scheduler ~/saps-scheduler
     cd ~/saps-scheduler
@@ -237,16 +239,16 @@ Configure o arquivo **/config/scheduler.conf** de acordo com os outros component
     ```
 
 -------------------------------------------------------------------
-## 〰 Dashboard
+## 〰 [Dashboard](https://github.com/ufcg-lsd/saps-dashboard)
 ### Instalação:
-1. Instalando curl e Node
+1. Instale o curl e o nodejs
     ```
     sudo apt-get update
     sudo apt-get install -y curl
     curl -sL https://deb.nodesource.com/setup_13.x | sudo -E bash -
     sudo apt-get install -y nodejs
     ```
-2. Configurar o [saps-dashboard](##dashboard)
+2. Clone e instale as dependencias
     ```
     git clone https://github.com/ufcg-lsd/saps-dashboard ~/saps-dashboard
     cd ~/saps-dashboard
@@ -270,14 +272,14 @@ Configure os arquivos **/backend.config** e **/public/dashboardApp.js** de acord
     ```
 
 -------------------------------------------------------------------
-## 〰 Arrebol 
+## 〰 [Arrebol](https://github.com/ufcg-lsd/arrebol) 
 ### ***Clean Option***
 ### Variaveis a serem definidas:
 * $arrebol_db_passwd    (default = @rrebol)
 * $arrebol_db_name      (default = arrebol)
 
 ### Instalação:
-1. Instalando JDK, Maven e Git
+1. Instale o JDK, Maven e Git
     ```
     sudo apt-get update
     sudo apt-get -y install openjdk-8-jdk
@@ -285,13 +287,13 @@ Configure os arquivos **/backend.config** e **/public/dashboardApp.js** de acord
     sudo apt-get -y install git
     sudo apt-get install -y postgresql
     ```
-2. Configurar o [arrebol](##arrebol)
+2. Clone e instale as dependencias
     ```
     git clone -b develop-saps https://github.com/ufcg-lsd/arrebol ~/arrebol
     cd ~/arrebol
     sudo mvn install
     ```
-4. Configurar o BD do arrebol
+4. Configure o BD do arrebol
     ``` 
     sudo su postgres 
     psql -c "ALTER USER postgres PASSWORD '$arrebol_db_passwd';"
@@ -315,7 +317,7 @@ Configure os arquivos **src/main/resources/application.properties** e **src/main
     bash bin/stop-service.sh
     ```
 
-### Checando
+### Checagem
 * Requisição
     ```
     curl http://127.0.0.1:8080/queues/default
@@ -333,18 +335,18 @@ Configure os arquivos **src/main/resources/application.properties** e **src/main
 * $arrebol_db_name      (default = arrebol)
 
 ### Instalação:
-1. Configurar o [arrebol](##arrebol)
+1. Clone e instale as dependencias
     ```
     git clone -b develop-saps https://github.com/ufcg-lsd/arrebol ~/arrebol
     cd ~/arrebol
     sudo mvn install
     ```
-2. Instalar dependencias
+2. Instale as dependencias do docker
     ```
     cd arrebol/deploy
     sudo bash setup.sh
     ```
-4. Configurar o BD do arrebol
+4. Configure o BD do arrebol
     ``` 
     sudo su postgres 
     psql -c "ALTER USER postgres PASSWORD '$arrebol_db_passwd';"
@@ -354,11 +356,11 @@ Configure os arquivos **src/main/resources/application.properties** e **src/main
 
 ### Configuração:
 Configure os arquivos da pasta **deploy/config/** de acordo com os outros componentes
-* Exemplo: [postgres.env](./confs/arrebol/docker-image/postgres.env) 
-* Exemplo: [pgadmin.env](./confs/arrebol/docker-image/pgadmin.env) 
-* Exemplo: [application.properties](./confs/arrebol/docker-image/application.properties) 
-* Exemplo: [arrebol.json](./confs/arrebol/docker-image/arrebol.json) 
-* Exemplo: [init.sql](./confs/arrebol/docker-image/init.sql) 
+* Exemplo: [postgres.env](./confs/arrebol/container/postgres.env) 
+* Exemplo: [pgadmin.env](./confs/arrebol/container/pgadmin.env) 
+* Exemplo: [application.properties](./confs/arrebol/container/application.properties) 
+* Exemplo: [arrebol.json](./confs/arrebol/container/arrebol.json) 
+* Exemplo: [init.sql](./confs/arrebol/container/init.sql) 
 
 
 ### Execução:
@@ -373,7 +375,7 @@ Configure os arquivos da pasta **deploy/config/** de acordo com os outros compon
     sudo docker volume rm lsd_postgresdata
     ```
 
-### Checando
+### Checagem
 * Requisição
     ```
     curl http://127.0.0.1:8080/queues/default
@@ -413,12 +415,7 @@ Configure os arquivos da pasta **/worker/deploy/hosts.conf ** de acordo com os o
     sudo apt install -y ansible
     ```
 
-* Faça o deploy do worker
-    ```
-    sudo bash arrebol/worker/deploy/install.sh
-    ```
-
-### Checando
+### Checagem
 * Requisição
     ```
     curl http://127.0.0.1:8080/queues/default
@@ -427,3 +424,41 @@ Configure os arquivos da pasta **/worker/deploy/hosts.conf ** de acordo com os o
     ```
     {"id":"default","name":"Default Queue","waiting_jobs":0,"worker_pools":1,"pools_size":5}
     ```
+
+-------------------------------------------------------------------
+## 〰 Atachando volume
+1. Crie uma patição no volume
+    * Comando: ```fdisk <volume>```
+    * Exemplo: ```fdisk /dev/sdb```
+1. Verifique se a partição foi feita
+    * Comando: ```lsblk```
+1. Defina um tipo de formatação para a partição
+    * Comando: ```mkfs --type <formato> <particao>```
+    * Exemplo: ``` mkfs --type ext4 /dev/sdb1```
+1. Monte a partição em um diretorio: 
+    * Comando: ```mount <particao> <diretorio>```
+    * Exemplo: ```mount /dev/sdb1 /nfs```
+
+-------------------------------------------------------------------
+## 〰 Testes NOP
+### Adicione as tags dos testes NOP nas configurações dos seguintes componentes
+1. [Dashboard](#〰-dashboard)
+    * Arquivo: [dashboardApp.js](https://github.com/ufcg-lsd/saps-dashboard/blob/develop/public/dashboardApp.js)
+    * Exemplo: [dashboardApp.js](./confs/dashboard/clean/dashboardApp.js) 
+1. [Dispatcher](#〰-dispatcher)
+    * Arquivo: [execution_script_tags.json](https://github.com/ufcg-lsd/saps-dispatcher/blob/develop/resources/execution_script_tags.json)
+    * Exemplo: [dispatcher.conf](./confs/dispatcher/clean/dispatcher.conf)
+1. [Scheduler](#〰-scheduler)
+    * Arquivo: [execution_script_tags.json](https://github.com/ufcg-lsd/saps-scheduler/blob/develop/resources/execution_script_tags.json)
+    * Exemplo: [scheduler.conf](./confs/scheduler/clean/scheduler.conf)
+
+### Clone o repositório saps-quality-assurance
+    ```
+    git clone -b https://github.com/ufcg-lsd/saps-quality-assurance ~/saps-quality-assurance
+    cd ~/saps-quality-assurance
+    ```
+
+### Execute os testes
+* Comando: ```sudo bash bin start-systemtest <admin_email> <admin_password> <dispatcher_ip_addrres> <submission_rest_server_port>```
+* Exemplo: ```sudo bash bin start-systemtest dispatcher_admin_email dispatcher_admin_password 127.0.0.1 8091```
+
