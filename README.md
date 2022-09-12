@@ -161,12 +161,12 @@ Configure o arquivo /config/archiver.conf de acordo com os outros componentes
 ### Execução:
 * Executando archiver
     ```
-    bash bin/start-service.sh
+    bash bin/start-service
     ```
 
 * Parando archiver
     ```
-    bash bin/stop-service.sh
+    bash bin/stop-service
     ```
 
 ------------------------------------------------------------------
@@ -200,12 +200,12 @@ Configure o arquivo **/config/dispatcher.conf** de acordo com os outros componen
 ### Execução:
 * Executando dispatcher
     ```
-    bash bin/start-service.sh
+    bash bin/start-service
     ```
 
 * Parando dispatcher
     ```
-    bash bin/stop-service.sh
+    bash bin/stop-service
     ```
 
 -------------------------------------------------------------------
@@ -232,12 +232,12 @@ Configure o arquivo **/config/scheduler.conf** de acordo com os outros component
 ### Execução:
 * Executando scheduler
     ```
-    bash bin/start-service.sh
+    bash bin/start-service
     ```
 
 * Parando scheduler
     ```
-    bash bin/stop-service.sh
+    bash bin/stop-service
     ```
 
 -------------------------------------------------------------------
