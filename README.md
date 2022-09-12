@@ -42,10 +42,11 @@
 -------------------------------------------------------------------
 ## ° [Catalog](https://github.com/ufcg-lsd/saps-catalog)
 ### Variaveis a serem definidas:
-* $catalog_user         (default = catalog_user)
-* $catalog_passwd       (default = catalog_passwd)
-* $catalog_db_name      (default = catalog_db_name)
-* $installed_version
+* Os valores atribuídos abaixo são default
+* export catalog_user=catalog_user
+* export catalog_passwd=catalog_passwd
+* export catalog_db_name=catalog_db_name
+* export installed_version= Verifique a sua versão
 
 ### Instalação:
 1. Configure o [saps-common](#°-common)
@@ -89,7 +90,8 @@
 -------------------------------------------------------------------
 ## ° [Archiver](https://github.com/ufcg-lsd/saps-archiver)
 ### Variaveis a serem definidas:
-* $nfs_server_folder_path   (default= /nfs)
+* Os valores atribuídos abaixo são default
+* export nfs_server_folder_path=/nfs
 
 ### Instalação:
 1. Configure o [saps-common](#°-common)
@@ -97,8 +99,8 @@
     ```
     git clone https://github.com/ufcg-lsd/saps-catalog ~/saps-catalog
     cd ~/saps-catalog
-    mvn install 
-    rm -rf ~/saps-catalog
+    sudo mvn install 
+    sudo rm -rf ~/saps-catalog
     ```
 3. Clone e instale as dependencias
     ```
@@ -111,7 +113,7 @@
     * Configurando
         ```
         sudo apt-get install -y nfs-kernel-server
-        mkdir -p $nfs_server_folder_path
+        sudo mkdir -p $nfs_server_folder_path
         echo "$nfs_server_folder_path *(rw,insecure,no_subtree_check,async,no_root_squash)" >> /etc/exports
         sudo service nfs-kernel-server enable
         sudo service nfs-kernel-server restart
@@ -159,12 +161,12 @@ Configure o arquivo /config/archiver.conf de acordo com os outros componentes
 ### Execução:
 * Executando archiver
     ```
-    bash bin/start-service.sh
+    bash bin/start-service
     ```
 
 * Parando archiver
     ```
-    bash bin/stop-service.sh
+    bash bin/stop-service
     ```
 
 ------------------------------------------------------------------
@@ -175,8 +177,8 @@ Configure o arquivo /config/archiver.conf de acordo com os outros componentes
     ```
     git clone https://github.com/ufcg-lsd/saps-catalog ~/saps-catalog
     cd ~/saps-catalog
-    mvn install 
-    rm -rf ~/saps-catalog
+    sudo mvn install 
+    sudo rm -rf ~/saps-catalog
     ```
 3. Clone e instale as dependencias
     ```
@@ -198,12 +200,12 @@ Configure o arquivo **/config/dispatcher.conf** de acordo com os outros componen
 ### Execução:
 * Executando dispatcher
     ```
-    bash bin/start-service.sh
+    bash bin/start-service
     ```
 
 * Parando dispatcher
     ```
-    bash bin/stop-service.sh
+    bash bin/stop-service
     ```
 
 -------------------------------------------------------------------
@@ -214,8 +216,8 @@ Configure o arquivo **/config/dispatcher.conf** de acordo com os outros componen
     ```
     git clone https://github.com/ufcg-lsd/saps-catalog ~/saps-catalog
     cd ~/saps-catalog
-    mvn install 
-    rm -rf ~/saps-catalog
+    sudo mvn install 
+    sudo rm -rf ~/saps-catalog
     ```
 3. Clone e instale as dependencias
     ```
@@ -230,12 +232,12 @@ Configure o arquivo **/config/scheduler.conf** de acordo com os outros component
 ### Execução:
 * Executando scheduler
     ```
-    bash bin/start-service.sh
+    bash bin/start-service
     ```
 
 * Parando scheduler
     ```
-    bash bin/stop-service.sh
+    bash bin/stop-service
     ```
 
 -------------------------------------------------------------------
@@ -275,8 +277,9 @@ Configure os arquivos **/backend.config** e **/public/dashboardApp.js** de acord
 ## ° [Arrebol](https://github.com/ufcg-lsd/arrebol) 
 ### ***Clean Option***
 ### Variaveis a serem definidas:
-* $arrebol_db_passwd    (default = @rrebol)
-* $arrebol_db_name      (default = arrebol)
+* Os valores atribuídos abaixo são default
+* export arrebol_db_passwd=@rrebol
+* export arrebol_db_name=arrebol
 
 ### Instalação:
 1. Instale o JDK, Maven e Git
@@ -341,8 +344,8 @@ Configure os arquivos **src/main/resources/application.properties** e **src/main
 -------------------------------------------------------------------
 ### ***Container Option***
 ### Variaveis a serem definidas:
-* $arrebol_db_passwd    (default = @rrebol)
-* $arrebol_db_name      (default = arrebol)
+* export arrebol_db_passwd=@rrebol
+* export arrebol_db_name=arrebol
 
 ### Instalação:
 1. Clone e instale as dependencias
