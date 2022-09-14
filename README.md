@@ -46,7 +46,7 @@
 * export catalog_user=catalog_user
 * export catalog_passwd=catalog_passwd
 * export catalog_db_name=catalog_db_name
-* export installed_version= Verifique a sua versão
+* export installed_version= Verifique a sua versão do PostgreSQL 
 
 ### Instalação:
 1. Configure o [saps-common](#°-common)
@@ -63,6 +63,9 @@
 4. Configure o Catalog
     ``` 
     sudo su postgres
+    export catalog_user=catalog_user
+    export catalog_passwd=catalog_passwd
+    export catalog_db_name=catalog_db_name
     psql -c "CREATE USER $catalog_user WITH PASSWORD '$catalog_passwd';"
     psql -c "CREATE DATABASE $catalog_db_name OWNER $catalog_user;"
     psql -c "GRANT ALL PRIVILEGES ON DATABASE $catalog_db_name TO $catalog_user;"
@@ -71,6 +74,10 @@
     * Verifique a versão **<installed_version>** do postgres com o comando:
         ```
         ls /etc/postgresql 
+        ```
+    * Após verificar a versão do postgres, defina a variável local:
+        ```
+        export installed_version=<postgres_version>
         ```
     * Configure as permissões:
         ```
@@ -114,7 +121,10 @@
         ```
         sudo apt-get install -y nfs-kernel-server
         sudo mkdir -p $nfs_server_folder_path
-        echo "$nfs_server_folder_path *(rw,insecure,no_subtree_check,async,no_root_squash)" >> /etc/exports
+
+        sudo vimecho /etc/exports 
+        +    $nfs_server_folder_path *(rw,insecure,no_subtree_check,async,no_root_squash)
+
         sudo service nfs-kernel-server enable
         sudo service nfs-kernel-server restart
         ```
@@ -143,7 +153,8 @@
         +                AllowOverride None
         +                Require all granted
         +        </Directory>
-        a2enmod headers
+    
+    sudo a2enmod headers
 
     sudo vim /etc/apache2/apache2.conf
     <FilesMatch ".+\.(txt|TXT|nc|NC|tif|TIF|tiff|TIFF|csv|CSV|log|LOG|metadata)$">
@@ -265,12 +276,12 @@ Configure os arquivos **/backend.config** e **/public/dashboardApp.js** de acord
 ### Execução:
 * Executando dashboard
     ```
-    bash bin/start-dashboard
+    sudo bash bin/start-dashboard
     ```
 
 * Parando dashboard
     ```
-    bash bin/stop-dashboard
+    sudo bash bin/stop-dashboard
     ```
 
 -------------------------------------------------------------------
@@ -348,24 +359,15 @@ Configure os arquivos **src/main/resources/application.properties** e **src/main
 * export arrebol_db_name=arrebol
 
 ### Instalação:
-1. Clone e instale as dependencias
+1. Clone o repositório
     ```
     git clone -b develop https://github.com/cilasmarques/arrebol ~/arrebol
-    cd ~/arrebol
-    sudo mvn install
     ```
 2. Instale as dependencias do docker
     ```
     cd arrebol/deploy
     sudo bash setup.sh
     ```
-4. Configure o BD do arrebol
-    ``` 
-    sudo su postgres 
-    psql -c "ALTER USER postgres PASSWORD '$arrebol_db_passwd';"
-    psql -c "CREATE DATABASE $arrebol_db_name OWNER postgres;"
-    ```
-
 
 ### Configuração:
 Configure os arquivos da pasta **deploy/config/** de acordo com os outros componentes
@@ -383,19 +385,18 @@ Configure os arquivos da pasta **deploy/config/** de acordo com os outros compon
 ### Execução:
 * Executando arrebol
     ```
-    sudo bash deploy-stack.sh
+    sudo bash deploy.sh start
     ```
 
 * Parando arrebol
     ```
-    sudo docker stack rm lsd
-    sudo docker volume rm lsd_postgresdata
+    sudo bash deploy.sh stop
     ```
 
 ### Checagem
 * Requisição
     ```
-    curl http://127.0.0.1:8080/queues/default
+    curl http://<arrebol_ip>:8080/queues/default
     ```
 * Resposta esperada
     ```
@@ -432,7 +433,7 @@ Configure os arquivos da pasta **/worker/deploy/hosts.conf ** de acordo com os o
 ### Checagem
 * Requisição
     ```
-    curl http://127.0.0.1:8080/queues/default
+    curl http://<worker_ip>:5555/version
     ```
 * Resposta esperada
     ```
