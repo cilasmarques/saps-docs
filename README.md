@@ -42,11 +42,10 @@
 -------------------------------------------------------------------
 ## ° [Catalog](https://github.com/ufcg-lsd/saps-catalog)
 ### Variaveis a serem definidas:
-* Os valores atribuídos abaixo são default
-* export catalog_user=catalog_user
-* export catalog_passwd=catalog_passwd
-* export catalog_db_name=catalog_db_name
-* export installed_version= Verifique a sua versão do PostgreSQL 
+* $catalog_user=catalog_user
+* $catalog_passwd=catalog_passwd
+* $catalog_db_name=catalog_db_name
+* $installed_version= Verifique a sua versão do PostgreSQL 
 
 ### Instalação:
 1. Configure o [saps-common](#°-common)
@@ -97,8 +96,7 @@
 -------------------------------------------------------------------
 ## ° [Archiver](https://github.com/ufcg-lsd/saps-archiver)
 ### Variaveis a serem definidas:
-* Os valores atribuídos abaixo são default
-* export nfs_server_folder_path=/nfs
+* $nfs_server_folder_path=/nfs
 
 ### Instalação:
 1. Configure o [saps-common](#°-common)
@@ -120,6 +118,7 @@
     * Configurando
         ```
         sudo apt-get install -y nfs-kernel-server
+        export nfs_server_folder_path=/nfs
         sudo mkdir -p $nfs_server_folder_path
 
         sudo vimecho /etc/exports 
@@ -289,8 +288,8 @@ Configure os arquivos **/backend.config** e **/public/dashboardApp.js** de acord
 ### ***Clean Option***
 ### Variaveis a serem definidas:
 * Os valores atribuídos abaixo são default
-* export arrebol_db_passwd=@rrebol
-* export arrebol_db_name=arrebol
+* $arrebol_db_passwd=@rrebol
+* $arrebol_db_name=arrebol
 
 ### Instalação:
 1. Instale o JDK, Maven e Git
@@ -316,7 +315,9 @@ Configure os arquivos **/backend.config** e **/public/dashboardApp.js** de acord
     ```
 4. Configure o BD do arrebol
     ``` 
-    sudo su postgres 
+    sudo su postgres
+    export arrebol_db_passwd=@rrebol
+    export arrebol_db_name=arrebol 
     psql -c "ALTER USER postgres PASSWORD '$arrebol_db_passwd';"
     psql -c "CREATE DATABASE $arrebol_db_name OWNER postgres;"
     ```
@@ -354,9 +355,6 @@ Configure os arquivos **src/main/resources/application.properties** e **src/main
 
 -------------------------------------------------------------------
 ### ***Container Option***
-### Variaveis a serem definidas:
-* export arrebol_db_passwd=@rrebol
-* export arrebol_db_name=arrebol
 
 ### Instalação:
 1. Clone o repositório
