@@ -287,7 +287,6 @@ Configure os arquivos **/backend.config** e **/public/dashboardApp.js** de acord
 ## ° [Arrebol](https://github.com/ufcg-lsd/arrebol) 
 ### ***Clean Option***
 ### Variaveis a serem definidas:
-* Os valores atribuídos abaixo são default
 * $arrebol_db_passwd=@rrebol
 * $arrebol_db_name=arrebol
 
