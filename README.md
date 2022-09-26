@@ -80,11 +80,11 @@
         ```
     * Configure as permissões:
         ```
-        sudo sed -i 's/peer/md5/g' /etc/postgresql/<installed_version>/main/pg_hba.conf
+        sudo sed -i 's/peer/md5/g' /etc/postgresql/$installed_version/main/pg_hba.conf
 
-        sudo bash -c 'echo "host all all 0.0.0.0/0 md5" >> /etc/postgresql/<installed_version>/main/pg_hba.conf'
+        sudo bash -c 'echo "host all all 0.0.0.0/0 md5" >> /etc/postgresql/$installed_version/main/pg_hba.conf'
 
-        sudo sed -i "$ a\listen_addresses = '*'" /etc/postgresql/<installed_version>/main/postgresql.conf
+        sudo sed -i "$ a\listen_addresses = '*'" /etc/postgresql/$installed_version/main/postgresql.conf
 
         sudo service postgresql restart
         ```
@@ -102,10 +102,10 @@
 1. Configure o [saps-common](#°-common)
 2. Instale as dependencias do [saps-catalog](#°-catalog)
     ```
-    git clone https://github.com/ufcg-lsd/saps-catalog ~/saps-catalog
-    cd ~/saps-catalog
+    git clone https://github.com/ufcg-lsd/saps-catalog ~/temp/saps-catalog
+    cd ~/temp/saps-catalog
     sudo mvn install 
-    sudo rm -rf ~/saps-catalog
+    sudo rm -rf ~/temp/saps-catalog
     ```
 3. Clone e instale as dependencias
     ```
@@ -121,7 +121,7 @@
         export nfs_server_folder_path=/nfs
         sudo mkdir -p $nfs_server_folder_path
 
-        sudo vimecho /etc/exports 
+        sudo vim /etc/exports 
         +    $nfs_server_folder_path *(rw,insecure,no_subtree_check,async,no_root_squash)
 
         sudo service nfs-kernel-server enable
@@ -185,10 +185,10 @@ Configure o arquivo /config/archiver.conf de acordo com os outros componentes
 1. Configure o [saps-common](#°-common)
 2. Instale as dependencias do [saps-catalog](#°-catalog)
     ```
-    git clone https://github.com/ufcg-lsd/saps-catalog ~/saps-catalog
-    cd ~/saps-catalog
+    git clone https://github.com/ufcg-lsd/saps-catalog ~/temp/saps-catalog
+    cd ~/temp/saps-catalog
     sudo mvn install 
-    sudo rm -rf ~/saps-catalog
+    sudo rm -rf ~/temp/saps-catalog
     ```
 3. Clone e instale as dependencias
     ```
@@ -224,10 +224,10 @@ Configure o arquivo **/config/dispatcher.conf** de acordo com os outros componen
 1. Configure o [saps-common](#°-common)
 2. Instale as dependencias do [saps-catalog](#°-catalog)
     ```
-    git clone https://github.com/ufcg-lsd/saps-catalog ~/saps-catalog
-    cd ~/saps-catalog
+    git clone https://github.com/ufcg-lsd/saps-catalog ~/temp/saps-catalog
+    cd ~/temp/saps-catalog
     sudo mvn install 
-    sudo rm -rf ~/saps-catalog
+    sudo rm -rf ~/temp/saps-catalog
     ```
 3. Clone e instale as dependencias
     ```
@@ -422,10 +422,10 @@ Configure os arquivos da pasta **/worker/deploy/hosts.conf ** de acordo com os o
     ```
 
 ### Instalação:
-    ```
-    cd ~/arrebol/worker/deploy/
-    sudo bash install.sh
-    ```
+```
+cd ~/arrebol/worker/deploy/
+sudo bash install.sh
+```
 
 ### Checagem
 * Requisição
@@ -465,10 +465,10 @@ Configure os arquivos da pasta **/worker/deploy/hosts.conf ** de acordo com os o
     * Exemplo: [scheduler.conf](./confs/scheduler/clean/scheduler.conf)
 
 ### Clone o repositório saps-quality-assurance
-    ```
-    git clone -b https://github.com/ufcg-lsd/saps-quality-assurance ~/saps-quality-assurance
-    cd ~/saps-quality-assurance
-    ```
+```
+git clone -b https://github.com/ufcg-lsd/saps-quality-assurance ~/saps-quality-assurance
+cd ~/saps-quality-assurance
+```
 
 ### Execute os testes
 * Comando: ```sudo bash bin start-systemtest <admin_email> <admin_password> <dispatcher_ip_addrres> <submission_rest_server_port>```
