@@ -68,6 +68,7 @@
     psql -c "CREATE USER $catalog_user WITH PASSWORD '$catalog_passwd';"
     psql -c "CREATE DATABASE $catalog_db_name OWNER $catalog_user;"
     psql -c "GRANT ALL PRIVILEGES ON DATABASE $catalog_db_name TO $catalog_user;"
+    exit
     ```
 5. Configure o PostgreSQL
     * Verifique a versão **<installed_version>** do postgres com o comando:
@@ -80,13 +81,14 @@
         ```
     * Configure as permissões:
         ```
-        sudo sed -i 's/peer/md5/g' /etc/postgresql/$installed_version/main/pg_hba.conf
+        sudo su
+        sed -i 's/peer/md5/g' /etc/postgresql/$installed_version/main/pg_hba.conf
 
-        sudo bash -c 'echo "host all all 0.0.0.0/0 md5" >> /etc/postgresql/$installed_version/main/pg_hba.conf'
+        bash -c echo "host all all 0.0.0.0/0 md5" >> /etc/postgresql/$installed_version/main/pg_hba.conf
 
-        sudo sed -i "$ a\listen_addresses = '*'" /etc/postgresql/$installed_version/main/postgresql.conf
+        sed -i "$ a\listen_addresses = '*'" /etc/postgresql/$installed_version/main/postgresql.conf
 
-        sudo service postgresql restart
+        service postgresql restart
         ```
 6. Teste o acesso de outra máquina para o Catalog
     ```
