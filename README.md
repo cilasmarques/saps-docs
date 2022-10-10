@@ -266,7 +266,7 @@ Configure o arquivo **/config/scheduler.conf** de acordo com os outros component
     ```
     git clone https://github.com/ufcg-lsd/saps-dashboard ~/saps-dashboard
     cd ~/saps-dashboard
-    sudo npm install
+    npm install
     ```
 
 ### Configuração:
