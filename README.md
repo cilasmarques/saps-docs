@@ -42,11 +42,10 @@
 -------------------------------------------------------------------
 ## ° [Catalog](https://github.com/ufcg-lsd/saps-catalog)
 ### Variaveis a serem definidas:
-* Os valores atribuídos abaixo são default
-* export catalog_user=catalog_user
-* export catalog_passwd=catalog_passwd
-* export catalog_db_name=catalog_db_name
-* export installed_version= Verifique a sua versão
+* $catalog_user=catalog_user
+* $catalog_passwd=catalog_passwd
+* $catalog_db_name=catalog_db_name
+* $installed_version= Verifique a sua versão do PostgreSQL 
 
 ### Instalação:
 1. Configure o [saps-common](#°-common)
@@ -63,24 +62,33 @@
 4. Configure o Catalog
     ``` 
     sudo su postgres
+    export catalog_user=catalog_user
+    export catalog_passwd=catalog_passwd
+    export catalog_db_name=catalog_db_name
     psql -c "CREATE USER $catalog_user WITH PASSWORD '$catalog_passwd';"
     psql -c "CREATE DATABASE $catalog_db_name OWNER $catalog_user;"
     psql -c "GRANT ALL PRIVILEGES ON DATABASE $catalog_db_name TO $catalog_user;"
+    exit
     ```
 5. Configure o PostgreSQL
     * Verifique a versão **<installed_version>** do postgres com o comando:
         ```
         ls /etc/postgresql 
         ```
+    * Após verificar a versão do postgres, defina a variável local:
+        ```
+        export installed_version=<postgres_version>
+        ```
     * Configure as permissões:
         ```
-        sudo sed -i 's/peer/md5/g' /etc/postgresql/<installed_version>/main/pg_hba.conf
+        sudo su
+        sed -i 's/peer/md5/g' /etc/postgresql/$installed_version/main/pg_hba.conf
 
-        sudo bash -c 'echo "host all all 0.0.0.0/0 md5" >> /etc/postgresql/<installed_version>/main/pg_hba.conf'
+        bash -c echo "host all all 0.0.0.0/0 md5" >> /etc/postgresql/$installed_version/main/pg_hba.conf
 
-        sudo sed -i "$ a\listen_addresses = '*'" /etc/postgresql/<installed_version>/main/postgresql.conf
+        sed -i "$ a\listen_addresses = '*'" /etc/postgresql/$installed_version/main/postgresql.conf
 
-        sudo service postgresql restart
+        service postgresql restart
         ```
 6. Teste o acesso de outra máquina para o Catalog
     ```
@@ -90,17 +98,16 @@
 -------------------------------------------------------------------
 ## ° [Archiver](https://github.com/ufcg-lsd/saps-archiver)
 ### Variaveis a serem definidas:
-* Os valores atribuídos abaixo são default
-* export nfs_server_folder_path=/nfs
+* $nfs_server_folder_path=/nfs
 
 ### Instalação:
 1. Configure o [saps-common](#°-common)
 2. Instale as dependencias do [saps-catalog](#°-catalog)
     ```
-    git clone https://github.com/ufcg-lsd/saps-catalog ~/saps-catalog
-    cd ~/saps-catalog
+    git clone https://github.com/ufcg-lsd/saps-catalog ~/temp/saps-catalog
+    cd ~/temp/saps-catalog
     sudo mvn install 
-    sudo rm -rf ~/saps-catalog
+    sudo rm -rf ~/temp/saps-catalog
     ```
 3. Clone e instale as dependencias
     ```
@@ -113,8 +120,12 @@
     * Configurando
         ```
         sudo apt-get install -y nfs-kernel-server
+        export nfs_server_folder_path=/nfs
         sudo mkdir -p $nfs_server_folder_path
-        echo "$nfs_server_folder_path *(rw,insecure,no_subtree_check,async,no_root_squash)" >> /etc/exports
+
+        sudo vim /etc/exports 
+        +    $nfs_server_folder_path *(rw,insecure,no_subtree_check,async,no_root_squash)
+
         sudo service nfs-kernel-server enable
         sudo service nfs-kernel-server restart
         ```
@@ -143,7 +154,8 @@
         +                AllowOverride None
         +                Require all granted
         +        </Directory>
-        a2enmod headers
+    
+    sudo a2enmod headers
 
     sudo vim /etc/apache2/apache2.conf
     <FilesMatch ".+\.(txt|TXT|nc|NC|tif|TIF|tiff|TIFF|csv|CSV|log|LOG|metadata)$">
@@ -175,10 +187,10 @@ Configure o arquivo /config/archiver.conf de acordo com os outros componentes
 1. Configure o [saps-common](#°-common)
 2. Instale as dependencias do [saps-catalog](#°-catalog)
     ```
-    git clone https://github.com/ufcg-lsd/saps-catalog ~/saps-catalog
-    cd ~/saps-catalog
+    git clone https://github.com/ufcg-lsd/saps-catalog ~/temp/saps-catalog
+    cd ~/temp/saps-catalog
     sudo mvn install 
-    sudo rm -rf ~/saps-catalog
+    sudo rm -rf ~/temp/saps-catalog
     ```
 3. Clone e instale as dependencias
     ```
@@ -214,10 +226,10 @@ Configure o arquivo **/config/dispatcher.conf** de acordo com os outros componen
 1. Configure o [saps-common](#°-common)
 2. Instale as dependencias do [saps-catalog](#°-catalog)
     ```
-    git clone https://github.com/ufcg-lsd/saps-catalog ~/saps-catalog
-    cd ~/saps-catalog
+    git clone https://github.com/ufcg-lsd/saps-catalog ~/temp/saps-catalog
+    cd ~/temp/saps-catalog
     sudo mvn install 
-    sudo rm -rf ~/saps-catalog
+    sudo rm -rf ~/temp/saps-catalog
     ```
 3. Clone e instale as dependencias
     ```
@@ -254,7 +266,7 @@ Configure o arquivo **/config/scheduler.conf** de acordo com os outros component
     ```
     git clone https://github.com/ufcg-lsd/saps-dashboard ~/saps-dashboard
     cd ~/saps-dashboard
-    sudo npm install
+    npm install
     ```
 
 ### Configuração:
@@ -265,21 +277,20 @@ Configure os arquivos **/backend.config** e **/public/dashboardApp.js** de acord
 ### Execução:
 * Executando dashboard
     ```
-    bash bin/start-dashboard
+    sudo bash bin/start-dashboard
     ```
 
 * Parando dashboard
     ```
-    bash bin/stop-dashboard
+    sudo bash bin/stop-dashboard
     ```
 
 -------------------------------------------------------------------
 ## ° [Arrebol](https://github.com/ufcg-lsd/arrebol) 
 ### ***Clean Option***
 ### Variaveis a serem definidas:
-* Os valores atribuídos abaixo são default
-* export arrebol_db_passwd=@rrebol
-* export arrebol_db_name=arrebol
+* $arrebol_db_passwd=@rrebol
+* $arrebol_db_name=arrebol
 
 ### Instalação:
 1. Instale o JDK, Maven e Git
@@ -305,7 +316,9 @@ Configure os arquivos **/backend.config** e **/public/dashboardApp.js** de acord
     ```
 4. Configure o BD do arrebol
     ``` 
-    sudo su postgres 
+    sudo su postgres
+    export arrebol_db_passwd=@rrebol
+    export arrebol_db_name=arrebol 
     psql -c "ALTER USER postgres PASSWORD '$arrebol_db_passwd';"
     psql -c "CREATE DATABASE $arrebol_db_name OWNER postgres;"
     ```
@@ -343,29 +356,17 @@ Configure os arquivos **src/main/resources/application.properties** e **src/main
 
 -------------------------------------------------------------------
 ### ***Container Option***
-### Variaveis a serem definidas:
-* export arrebol_db_passwd=@rrebol
-* export arrebol_db_name=arrebol
 
 ### Instalação:
-1. Clone e instale as dependencias
+1. Clone o repositório
     ```
     git clone -b develop https://github.com/cilasmarques/arrebol ~/arrebol
-    cd ~/arrebol
-    sudo mvn install
     ```
 2. Instale as dependencias do docker
     ```
     cd arrebol/deploy
     sudo bash setup.sh
     ```
-4. Configure o BD do arrebol
-    ``` 
-    sudo su postgres 
-    psql -c "ALTER USER postgres PASSWORD '$arrebol_db_passwd';"
-    psql -c "CREATE DATABASE $arrebol_db_name OWNER postgres;"
-    ```
-
 
 ### Configuração:
 Configure os arquivos da pasta **deploy/config/** de acordo com os outros componentes
@@ -383,19 +384,18 @@ Configure os arquivos da pasta **deploy/config/** de acordo com os outros compon
 ### Execução:
 * Executando arrebol
     ```
-    sudo bash deploy-stack.sh
+    sudo bash deploy.sh start
     ```
 
 * Parando arrebol
     ```
-    sudo docker stack rm lsd
-    sudo docker volume rm lsd_postgresdata
+    sudo bash deploy.sh stop
     ```
 
 ### Checagem
 * Requisição
     ```
-    curl http://127.0.0.1:8080/queues/default
+    curl http://<arrebol_ip>:8080/queues/default
     ```
 * Resposta esperada
     ```
@@ -424,15 +424,15 @@ Configure os arquivos da pasta **/worker/deploy/hosts.conf ** de acordo com os o
     ```
 
 ### Instalação:
-    ```
-    cd ~/arrebol/worker/deploy/
-    sudo bash install.sh
-    ```
+```
+cd ~/arrebol/worker/deploy/
+sudo bash install.sh
+```
 
 ### Checagem
 * Requisição
     ```
-    curl http://127.0.0.1:8080/queues/default
+    curl http://<worker_ip>:5555/version
     ```
 * Resposta esperada
     ```
@@ -467,10 +467,10 @@ Configure os arquivos da pasta **/worker/deploy/hosts.conf ** de acordo com os o
     * Exemplo: [scheduler.conf](./confs/scheduler/clean/scheduler.conf)
 
 ### Clone o repositório saps-quality-assurance
-    ```
-    git clone -b https://github.com/ufcg-lsd/saps-quality-assurance ~/saps-quality-assurance
-    cd ~/saps-quality-assurance
-    ```
+```
+git clone -b https://github.com/ufcg-lsd/saps-quality-assurance ~/saps-quality-assurance
+cd ~/saps-quality-assurance
+```
 
 ### Execute os testes
 * Comando: ```sudo bash bin start-systemtest <admin_email> <admin_password> <dispatcher_ip_addrres> <submission_rest_server_port>```
