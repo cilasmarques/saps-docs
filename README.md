@@ -130,6 +130,55 @@
     TODO
     ```
 
+5. Configure apache (necessário para acesso aos dados por email)
+* Instale o apache
+  ```
+  sudo apt-get install -y apache2
+  ```
+
+* Modifique o arquivo sites-available/default-ssl.conf
+  ```
+  sudo vim /etc/apache2/sites-available/default-ssl.conf
+  ```
+  * Mude o DocumentRoot para o diretorio do nfs (default = /nfs)
+    ```
+    DocumentRoot $nfs_server_folder_path 
+    ```
+
+* Modifique o arquivo sites-available/000-default.conf
+  ```
+  sudo vim /etc/apache2/sites-available/000-default.conf
+  ```
+  * Mude o DocumentRoot e adicione as linhas em sequencia
+    ```
+    DocumentRoot $nfs_server_folder_path 
+            Options +Indexes
+            <Directory $nfs_server_folder_path>
+                    Options Indexes FollowSymLinks
+                    AllowOverride None
+                    Require all granted
+            </Directory>
+    ```
+
+
+* Modifique o arquivo sites-available/000-default.conf
+  ```
+  sudo vim /etc/apache2/apache2.conf
+  ```
+  * Mude o FilesMatch 
+    ```
+    <FilesMatch ".+\.(txt|TXT|nc|NC|tif|TIF|tiff|TIFF|csv|CSV|log|LOG|metadata)$">
+            ForceType application/octet-stream
+            Header set Content-Disposition attachment
+    </FilesMatch>
+    ```
+
+* Após configurar os arquivos, execute:
+  ```
+  sudo a2enmod headers
+  sudo service apache2 restart
+  ```
+
 ### Configuração:
 Configure o arquivo /config/archiver.conf de acordo com os outros componentes
 * Exemplo (nfs): [archiver.conf](./confs/archiver/clean/archiver.conf) 
