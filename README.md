@@ -71,28 +71,17 @@
     exit
     ```
 5. Configure o PostgreSQL
-    * Verifique a versão **<installed_version>** do postgres com o comando:
-        ```
-        ls /etc/postgresql 
-        ```
-    * Após verificar a versão do postgres, defina a variável local:
-        ```
-        export installed_version=<postgres_version>
-        ```
-    * Configure as permissões:
-        ```
-        sudo su
-        sed -i 's/peer/md5/g' /etc/postgresql/$installed_version/main/pg_hba.conf
-
-        bash -c echo "host all all 0.0.0.0/0 md5" >> /etc/postgresql/$installed_version/main/pg_hba.conf
-
-        sed -i "$ a\listen_addresses = '*'" /etc/postgresql/$installed_version/main/postgresql.conf
-
-        service postgresql restart
-        ```
+    ```
+    sudo su
+    export installed_version=`ls /etc/postgresql`
+    sed -i 's/peer/md5/g' /etc/postgresql/$installed_version/main/pg_hba.conf
+    bash -c echo "host all all 0.0.0.0/0 md5" >> /etc/postgresql/$installed_version/main/pg_hba.conf
+    sed -i "$ a\listen_addresses = '*'" /etc/postgresql/$installed_version/main/postgresql.conf
+    service postgresql restart
+    ```
 6. Teste o acesso de outra máquina para o Catalog
     ```
-        psql -h $catalog_ip_address -p 5432 $catalog_db_name $catalog_user
+    psql -h $catalog_ip_address -p 5432 $catalog_db_name $catalog_user
     ```
 
 -------------------------------------------------------------------
