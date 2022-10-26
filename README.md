@@ -75,7 +75,7 @@
     sudo su
     export installed_version=`ls /etc/postgresql`
     sed -i 's/peer/md5/g' /etc/postgresql/$installed_version/main/pg_hba.conf
-    bash -c echo "host all all 0.0.0.0/0 md5" >> /etc/postgresql/$installed_version/main/pg_hba.conf
+    echo "host all all 0.0.0.0/0 md5" >> /etc/postgresql/$installed_version/main/pg_hba.conf
     sed -i "$ a\listen_addresses = '*'" /etc/postgresql/$installed_version/main/postgresql.conf
     service postgresql restart
     exit
@@ -229,7 +229,6 @@ Configure o arquivo **/config/scheduler.conf** de acordo com os outros component
     sudo apt-get install -y curl
     curl -sL https://deb.nodesource.com/setup_13.x | sudo -E bash -
     sudo apt-get install -y nodejs
-    sudo apt install -y npm
     ```
 2. Clone e instale as dependencias
     ```
