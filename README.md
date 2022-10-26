@@ -78,6 +78,7 @@
     bash -c echo "host all all 0.0.0.0/0 md5" >> /etc/postgresql/$installed_version/main/pg_hba.conf
     sed -i "$ a\listen_addresses = '*'" /etc/postgresql/$installed_version/main/postgresql.conf
     service postgresql restart
+    exit
     ```
 6. Teste o acesso de outra máquina para o Catalog
     ```
@@ -127,33 +128,6 @@
 * SWIFT (Opção 2)
     ```
     TODO
-    ```
-
-5. Instale o apache
-    ```
-    sudo apt-get install -y apache2
-
-    sudo vim /etc/apache2/sites-available/default-ssl.conf
-        DocumentRoot $nfs_server_folder_path
-
-    sudo vim /etc/apache2/sites-available/000-default.conf
-        DocumentRoot $nfs_server_folder_path
-        +        Options +Indexes
-        +        <Directory $nfs_server_folder_path>
-        +                Options Indexes FollowSymLinks
-        +                AllowOverride None
-        +                Require all granted
-        +        </Directory>
-    
-    sudo a2enmod headers
-
-    sudo vim /etc/apache2/apache2.conf
-    <FilesMatch ".+\.(txt|TXT|nc|NC|tif|TIF|tiff|TIFF|csv|CSV|log|LOG|metadata)$">
-            ForceType application/octet-stream
-            Header set Content-Disposition attachment
-    </FilesMatch>
-
-    sudo service apache2 restart
     ```
 
 ### Configuração:
@@ -315,6 +289,7 @@ Configure os arquivos **/backend.config** e **/public/dashboardApp.js** de acord
     export arrebol_db_name=arrebol 
     psql -c "ALTER USER postgres PASSWORD '$arrebol_db_passwd';"
     psql -c "CREATE DATABASE $arrebol_db_name OWNER postgres;"
+    exit
     ```
 
 ### Configuração:
