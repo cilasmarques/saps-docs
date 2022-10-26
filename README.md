@@ -3,26 +3,26 @@
 
 
 # Componentes SAPS
-1. [Common](#°-common)
-1. [Catalog](#°-catalog)
-1. [Archiver](#°-archiver)
-1. [Dispatcher](#°-dispatcher)
-1. [Scheduler](#°-scheduler)
-1. [Dashboard](#°-dashboard)
-1. [Arrebol](#°-arrebol)
+1. [Common](#common)
+1. [Catalog](#catalog)
+1. [Archiver](#archiver)
+1. [Dispatcher](#dispatcher)
+1. [Scheduler](#scheduler)
+1. [Dashboard](#dashboard)
+1. [Arrebol](#arrebol)
     1. [Clean Option](#clean-option)
     1. [Container Option](#container-option)
-1. [Workers](#°-workers)
-1. [Atachando volume ao nfs](#°-atachando-volume)
+1. [Workers](#workers)
+1. [Atachando volume ao nfs](#atachando-volume)
 1. [Testes NOP](#testes-nop)
 
 -------------------------------------------------------------------
-## ° [Common](https://github.com/ufcg-lsd/saps-common)
+## [Common](https://github.com/ufcg-lsd/saps-common)
 * Esse repositório é necessário para:
-    1. [Catalog](#°-catalog)
-    2. [Archiver](#°-archiver)
-    3. [Dispatcher](#°-dispatcher)
-    4. [Scheduler](#°-scheduler)
+    1. [Catalog](#catalog)
+    2. [Archiver](#archiver)
+    3. [Dispatcher](#dispatcher)
+    4. [Scheduler](#scheduler)
 
 ### Instalação:
 1. Instale o JDK, Maven, Git
@@ -40,7 +40,7 @@
     ```
 
 -------------------------------------------------------------------
-## ° [Catalog](https://github.com/ufcg-lsd/saps-catalog)
+## [Catalog](https://github.com/ufcg-lsd/saps-catalog)
 ### Variaveis a serem definidas:
 * $catalog_user=catalog_user
 * $catalog_passwd=catalog_passwd
@@ -48,7 +48,7 @@
 * $installed_version= Verifique a sua versão do PostgreSQL 
 
 ### Instalação:
-1. Configure o [saps-common](#°-common)
+1. Configure o [saps-common](#common)
 2. Clone e instale as dependencias
     ```
     git clone https://github.com/ufcg-lsd/saps-catalog ~/saps-catalog
@@ -86,13 +86,13 @@
     ```
 
 -------------------------------------------------------------------
-## ° [Archiver](https://github.com/ufcg-lsd/saps-archiver)
+## [Archiver](https://github.com/ufcg-lsd/saps-archiver)
 ### Variaveis a serem definidas:
 * $nfs_server_folder_path=/nfs
 
 ### Instalação:
-1. Configure o [saps-common](#°-common)
-2. Instale as dependencias do [saps-catalog](#°-catalog)
+1. Configure o [saps-common](#common)
+2. Instale as dependencias do [saps-catalog](#catalog)
     ```
     git clone https://github.com/ufcg-lsd/saps-catalog ~/temp/saps-catalog
     cd ~/temp/saps-catalog
@@ -146,10 +146,10 @@ Configure o arquivo /config/archiver.conf de acordo com os outros componentes
     ```
 
 ------------------------------------------------------------------
-## ° [Dispatcher](https://github.com/ufcg-lsd/saps-dispatcher)
+## [Dispatcher](https://github.com/ufcg-lsd/saps-dispatcher)
 ### Instalação:
-1. Configure o [saps-common](#°-common)
-2. Instale as dependencias do [saps-catalog](#°-catalog)
+1. Configure o [saps-common](#common)
+2. Instale as dependencias do [saps-catalog](#catalog)
     ```
     git clone https://github.com/ufcg-lsd/saps-catalog ~/temp/saps-catalog
     cd ~/temp/saps-catalog
@@ -187,10 +187,10 @@ Configure o arquivo **/config/dispatcher.conf** de acordo com os outros componen
     ```
 
 -------------------------------------------------------------------
-## ° [Scheduler](https://github.com/ufcg-lsd/saps-scheduler)
+## [Scheduler](https://github.com/ufcg-lsd/saps-scheduler)
 ### Instalação:
-1. Configure o [saps-common](#°-common)
-2. Instale as dependencias do [saps-catalog](#°-catalog)
+1. Configure o [saps-common](#common)
+2. Instale as dependencias do [saps-catalog](#catalog)
     ```
     git clone https://github.com/ufcg-lsd/saps-catalog ~/temp/saps-catalog
     cd ~/temp/saps-catalog
@@ -221,7 +221,7 @@ Configure o arquivo **/config/scheduler.conf** de acordo com os outros component
     ```
 
 -------------------------------------------------------------------
-## ° [Dashboard](https://github.com/ufcg-lsd/saps-dashboard)
+## [Dashboard](https://github.com/ufcg-lsd/saps-dashboard)
 ### Instalação:
 1. Instale o curl e o nodejs
     ```
@@ -255,7 +255,7 @@ Configure os arquivos **/backend.config** e **/public/dashboardApp.js** de acord
     ```
 
 -------------------------------------------------------------------
-## ° [Arrebol](https://github.com/ufcg-lsd/arrebol) 
+## [Arrebol](https://github.com/ufcg-lsd/arrebol) 
 ### ***Clean Option***
 ### Variaveis a serem definidas:
 * $arrebol_db_passwd=@rrebol
@@ -273,7 +273,7 @@ Configure os arquivos **/backend.config** e **/public/dashboardApp.js** de acord
 2. Instale o ansible 
     ```
     sudo apt update
-    sudo apt install -y software-properties-common
+    sudo apt install --y software-properties-common
     sudo apt-add-repository --yes --update ppa:ansible/ansible
     sudo apt install -y ansible
     ```
@@ -300,7 +300,7 @@ Configure os arquivos **src/main/resources/application.properties** e **src/main
 
 ### Antes de executar, configure os workers do arrebol 
 * Essa configuração deve ser feita na **mesma máquina que executará** o arrebol**.
-* Para configurar o worker, siga esses [passos](#°-workers)
+* Para configurar o worker, siga esses [passos](#-workers)
 
 ### Execução:
 * Executando arrebol
@@ -349,7 +349,7 @@ Configure os arquivos da pasta **deploy/config/** de acordo com os outros compon
 
 ### Antes de executar, configure os workers do arrebol 
 * Essa configuração deve ser feita na **mesma máquina que executará** o arrebol**.
-* Para configurar o worker, siga esses [passos](#°-workers)
+* Para configurar o worker, siga esses [passos](#-workers)
 
 ### Execução:
 * Executando arrebol
@@ -373,7 +373,7 @@ Configure os arquivos da pasta **deploy/config/** de acordo com os outros compon
     ```
 
 -------------------------------------------------------------------
-## ° Workers
+## Workers
 ### Configuração:
 Configure os arquivos da pasta **/worker/deploy/hosts.conf ** de acordo com os outros componentes
 * Exemplo:
@@ -410,7 +410,7 @@ sudo bash install.sh
     ```
 
 -------------------------------------------------------------------
-## ° Atachando volume
+## Atachando volume
 1. Crie uma patição no volume
     * Comando: ```fdisk <volume>```
     * Exemplo: ```fdisk /dev/sdb```
@@ -424,15 +424,15 @@ sudo bash install.sh
     * Exemplo: ```mount /dev/sdb1 /nfs```
 
 -------------------------------------------------------------------
-## ° Testes NOP
+## Testes NOP
 ### Adicione as tags dos testes NOP nas configurações dos seguintes componentes
-1. [Dashboard](#°-dashboard)
+1. [Dashboard](#-dashboard)
     * Arquivo: [dashboardApp.js](https://github.com/ufcg-lsd/saps-dashboard/blob/develop/public/dashboardApp.js)
     * Exemplo: [dashboardApp.js](./confs/dashboard/clean/dashboardApp.js) 
-1. [Dispatcher](#°-dispatcher)
+1. [Dispatcher](#dispatcher)
     * Arquivo: [execution_script_tags.json](https://github.com/ufcg-lsd/saps-dispatcher/blob/develop/resources/execution_script_tags.json)
     * Exemplo: [dispatcher.conf](./confs/dispatcher/clean/dispatcher.conf)
-1. [Scheduler](#°-scheduler)
+1. [Scheduler](#scheduler)
     * Arquivo: [execution_script_tags.json](https://github.com/ufcg-lsd/saps-scheduler/blob/develop/resources/execution_script_tags.json)
     * Exemplo: [scheduler.conf](./confs/scheduler/clean/scheduler.conf)
 
