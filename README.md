@@ -229,6 +229,7 @@ Configure o arquivo **/config/scheduler.conf** de acordo com os outros component
     sudo apt-get install -y curl
     curl -sL https://deb.nodesource.com/setup_13.x | sudo -E bash -
     sudo apt-get install -y nodejs
+    sudo apt install -y npm
     ```
 2. Clone e instale as dependencias
     ```
@@ -272,7 +273,7 @@ Configure os arquivos **/backend.config** e **/public/dashboardApp.js** de acord
 2. Instale o ansible 
     ```
     sudo apt update
-    sudo apt install software-properties-common
+    sudo apt install -y software-properties-common
     sudo apt-add-repository --yes --update ppa:ansible/ansible
     sudo apt install -y ansible
     ```
