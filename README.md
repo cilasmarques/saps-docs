@@ -110,15 +110,14 @@
 * NFS (Opção 1)
     * Configurando
         ```
-        sudo apt-get install -y nfs-kernel-server
+        sudo su
+        apt-get install -y nfs-kernel-server
         export nfs_server_folder_path=/nfs
-        sudo mkdir -p $nfs_server_folder_path
-
-        sudo vim /etc/exports 
-        +    $nfs_server_folder_path *(rw,insecure,no_subtree_check,async,no_root_squash)
-
-        sudo service nfs-kernel-server enable
-        sudo service nfs-kernel-server restart
+        mkdir -p $nfs_server_folder_path
+        echo $nfs_server_folder_path '*(rw,insecure,no_subtree_check,async,no_root_squash)' >> /etc/exports 
+        service nfs-kernel-server enable
+        service nfs-kernel-server restart
+        exit
         ```
     * Testando
         ```
