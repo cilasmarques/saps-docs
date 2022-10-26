@@ -96,7 +96,9 @@
     git clone https://github.com/ufcg-lsd/saps-catalog ~/temp/saps-catalog
     cd ~/temp/saps-catalog
     sudo mvn install 
+    cd -
     sudo rm -rf ~/temp/saps-catalog
+    sudo rm -d ~/temp/
     ```
 3. Clone e instale as dependencias
     ```
@@ -179,7 +181,9 @@ Configure o arquivo /config/archiver.conf de acordo com os outros componentes
     git clone https://github.com/ufcg-lsd/saps-catalog ~/temp/saps-catalog
     cd ~/temp/saps-catalog
     sudo mvn install 
+    cd -
     sudo rm -rf ~/temp/saps-catalog
+    sudo rm -d ~/temp/
     ```
 3. Clone e instale as dependencias
     ```
@@ -218,7 +222,9 @@ Configure o arquivo **/config/dispatcher.conf** de acordo com os outros componen
     git clone https://github.com/ufcg-lsd/saps-catalog ~/temp/saps-catalog
     cd ~/temp/saps-catalog
     sudo mvn install 
+    cd -
     sudo rm -rf ~/temp/saps-catalog
+    sudo rm -d ~/temp/
     ```
 3. Clone e instale as dependencias
     ```
