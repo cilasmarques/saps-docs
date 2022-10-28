@@ -116,6 +116,7 @@
         export nfs_server_folder_path=/nfs
         mkdir -p $nfs_server_folder_path
         echo $nfs_server_folder_path '*(rw,insecure,no_subtree_check,async,no_root_squash)' >> /etc/exports 
+        exportfs -arvf
         service nfs-kernel-server enable
         service nfs-kernel-server restart
         exit
