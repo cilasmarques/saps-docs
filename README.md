@@ -288,9 +288,11 @@ Configure o arquivo **/config/scheduler.conf** de acordo com os outros component
     ```
 
 ### Configuração:
-Configure os arquivos **/backend.config** e **/public/dashboardApp.js** de acordo com os outros componentes
-* Exemplo: [backend.config](./confs/dashboard/clean/backend.config) 
-* Exemplo: [dashboardApp.js](./confs/dashboard/clean/dashboardApp.js) 
+* Configure o host e as portas em **/backend.config** 
+* Configure a rota de callback do checkin EGI em **/public/services/dasboardService.js** (Linha 80)
+* Configure a urlSapsService e EGISecretKey em **/public/dashboardApp.js** (Linhas 52 e 53)
+* Configure os [endpoints](https://docs.egi.eu/providers/check-in/sp/#endpoints) do check-in EGI em **/app.js** (Linhas 75 ~ 89)
+* Configure o nginx e o [certificado](https://certbot.eff.org/) (Siga o exemplo do arquivo **/nginx/default**)
 
 ### Execução:
 * Executando dashboard
