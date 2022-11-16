@@ -476,6 +476,7 @@ sudo bash install.sh
 
 -------------------------------------------------------------------
 ## Atachando volume
+### Volume menor que 2TB
 1. Crie uma patição no volume
     * Comando: ```fdisk <volume>```
     * Exemplo: ```fdisk /dev/sdb```
@@ -487,6 +488,28 @@ sudo bash install.sh
 1. Monte a partição em um diretorio: 
     * Comando: ```mount <particao> <diretorio>```
     * Exemplo: ```mount /dev/sdb1 /nfs```
+
+### Volume maior que 2TB
+1. Crie uma patição no volume
+    * Comando: ```parted <volume>```
+    * Exemplo: ```parted /dev/sdb```
+1. Crie uma label
+    * Comando: ```mklabel gpt```
+1. Defina a unidade de armazenamento
+    * Comando: ```unit TB```
+1. Informa o tamanho do armazenamento
+    * Comando: ```mkpart primary <init>TB <limit>TB```
+    * Exemplo: ```mkpart primary 0.00TB 2.00TB```
+1. Verifique se a partição foi feita e salve
+    * Comando: ```print```
+    * Comando: ```quit```
+1. Defina um tipo de formatação para a partição
+    * Comando: ```sudo mkfs.ext4 <volume>```
+    * Comando: ```sudo mkfs.ext4 /dev/sdb1```
+1. Monte a partição em um diretorio: 
+    * Comando: ```mount <particao> <diretorio>```
+    * Exemplo: ```mount /dev/sdb1 /nfs```
+
 
 -------------------------------------------------------------------
 ## Testes NOP
