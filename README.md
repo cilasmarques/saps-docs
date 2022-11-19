@@ -62,6 +62,12 @@
     ``` 
     sudo apt-get install -y postgresql
     ```
+1. Instale o pip e o pandas
+    ``` 
+    sudo apt install python3-pip
+    pip install pandas
+    pip install tqdm
+    ```
 1. Configure o Catalog
     ``` 
     sudo su postgres
