@@ -15,6 +15,9 @@
 1. [Workers](#workers)
 1. [Atachando volume ao nfs](#atachando-volume)
 1. [Testes NOP](#testes-nop)
+1. [Crontab](#crontab)
+1. [Logrotate](#logrotate)
+
 
 -------------------------------------------------------------------
 ## [Common](https://github.com/ufcg-lsd/saps-common)
@@ -49,17 +52,17 @@
 
 ### Instalação:
 1. Configure o [saps-common](#common)
-2. Clone e instale as dependencias
+1. Clone e instale as dependencias
     ```
     git clone https://github.com/ufcg-lsd/saps-catalog ~/saps-catalog
     cd ~/saps-catalog
     sudo mvn install 
     ```
-3. Instale o postgres
+1. Instale o postgres 
     ``` 
     sudo apt-get install -y postgresql
     ```
-4. Configure o Catalog
+1. Configure o Catalog
     ``` 
     sudo su postgres
     export catalog_user=catalog_user
@@ -70,7 +73,7 @@
     psql -c "GRANT ALL PRIVILEGES ON DATABASE $catalog_db_name TO $catalog_user;"
     exit
     ```
-5. Configure o PostgreSQL
+1. Configure o PostgreSQL
     ```
     sudo su
     export installed_version=`ls /etc/postgresql`
@@ -80,7 +83,7 @@
     service postgresql restart
     exit
     ```
-6. Teste o acesso de outra máquina para o Catalog
+1. Teste o acesso de outra máquina para o Catalog
     ```
     psql -h $catalog_ip_address -p 5432 $catalog_db_name $catalog_user
     ```
@@ -534,3 +537,39 @@ cd ~/saps-quality-assurance
 * Comando: ```sudo bash bin start-systemtest <admin_email> <admin_password> <dispatcher_ip_addrres> <submission_rest_server_port>```
 * Exemplo: ```sudo bash bin start-systemtest dispatcher_admin_email dispatcher_admin_password 127.0.0.1 8091```
 
+-------------------------------------------------------------------
+## [Crontab]
+* catalog -> crontab do script de sumarização
+  ```
+  0 0 * * * bash /home/ubuntu/saps-catalog/scripts/build_tasks_overview.sh
+  ```
+
+* archiver -> crontab do script de contagem-dirs-arquivados
+  ```
+  * * */1 * * bash /home/ubuntu/saps-archiver/scripts/build_archiver_overview.sh
+  ```
+
+* dispatcher -> crontab do script de acessos + scripts de sumarização_manel
+  ```
+  59 23 * * * sudo /bin/bash ~/saps-dispatcher/logs/login_counter.sh 
+  0 0 * * * sudo /bin/bash ~/saps-dispatcher/stats/stats_archived.sh > ~/saps-dispatcher/scripts/summary.csv 
+  0 0 * * * sudo /bin/bash ~/saps-dispatcher/stats/logins_accumulator.sh >> ~/saps-dispatcher/scripts/summary.csv
+  0 0 * * * sudo python3 ~/saps-dispatcher/stats/stats_tasks_raw_data.py
+  ```
+
+* arrebol -> crontab do script de limpeza do banco de dados
+  ```
+  0 0 * * *   sudo bash /home/ubuntu/arrebol/bin/db_cleaner.sh
+  ```
+
+* workers -> crontab dos containers não finalizados
+  ```
+  0 0 * * *  sudo docker ps -aq | sudo xargs docker stop | sudo xargs docker rm
+  ```
+
+-------------------------------------------------------------------
+## [Logrotate]
+* [dispatcher](./confs/dispatcher/logrotate.conf) 
+* [scheduler](./confs/scheduler/logrotate.conf)
+* [archiver](./confs/archiver/logrotate.conf)
+* [arrebol](./confs/arrebol/logrotate.conf)
