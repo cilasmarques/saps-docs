@@ -65,8 +65,8 @@
 1. Instale o pip e o pandas
     ``` 
     sudo apt install python3-pip
-    pip install pandas
-    pip install tqdm
+    pip3 install pandas
+    pip3 install tqdm
     ```
 1. Configure o Catalog
     ``` 
