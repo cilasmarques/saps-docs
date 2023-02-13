@@ -91,7 +91,7 @@
     ```
 1. Teste o acesso de outra máquina para o Catalog
     ```
-    psql -h $catalog_ip_address -p 5432 $catalog_db_name $catalog_user
+    psql -h <catalog_ip_address> -p 5432 <catalog_db_name> <catalog_user>
     ```
 
 -------------------------------------------------------------------
