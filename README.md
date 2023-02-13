@@ -305,12 +305,27 @@ Configure o arquivo **/config/scheduler.conf** de acordo com os outros component
     npm install
     ```
 
-### Configuração:
-* Configure o host e as portas em **/backend.config** 
-* Configure a rota de callback do checkin EGI em **/public/services/dasboardService.js** (Linha 80)
-* Configure a urlSapsService e EGISecretKey em **/public/dashboardApp.js** (Linhas 52 e 53)
-* Configure os [endpoints](https://docs.egi.eu/providers/check-in/sp/#endpoints) do check-in EGI em **/app.js** (Linhas 75 ~ 89)
-* Configure o nginx e o [certificado](https://certbot.eff.org/) (Siga o exemplo do arquivo **/nginx/default**)
+### Configuração Geral:
+* Configure o host e as portas em [**/backend.config**](./confs/dashboard/clean/backend.config)
+* Configure a rota de callback do checkin EGI em [**/public/services/dasboardService.js**](./confs/dashboard/clean/dasboardService.js) (Linha 80)
+* Configure a urlSapsService e EGISecretKey em [**/public/dashboardApp.js**](./confs/dashboard/clean/dashboardApp.js) (Linhas 52 e 53)
+
+
+### Configuração do OAuth2 do EGI
+* O OAuth2 EGI serve para que usuários cadastrados no [EGI](https://aai.egi.eu/registry/auth/login/) possam se autenticar
+* Para habilitar essa funcionalidade é preciso descomentar as linhas 159~162 do **app.js**
+* Os endpoints de redirecionamento variam de acordo com os ambientes (desenvolvimento e produção) e precisam de algumas credenciais do usuário 
+  * (Quem disponibilizou as credenciais pra gente foi o pessoal da europa)
+* O redirecionamento do OAuthEGI precisa ser para um dominio autorizado, dentre eles, temos:
+  * Desenvolvimento: 
+    1. http://localhost:8081/auth-egi-callback
+    1. https://saps-test.lsd.ufcg.edu.br/auth-egi-callback
+  * Produção
+    1. https://saps.vm.fedcloud.eosc-synergy.eu/auth-egi-callback
+* Com isso, é preciso configurar os [endpoints](https://docs.egi.eu/providers/check-in/sp/#endpoints) do check-in EGI no [**/app.js**](./confs/dashboard/clean/app.js) (Linhas 75 ~ 89)
+
+* Caso esteja usando um dominio https, é preciso configurar o certificado SSL e o direcionamento das requisições.
+  * Para isso, configure o nginx e o [certificado](https://certbot.eff.org/) (Siga o exemplo do arquivo **/nginx/default**)
 
 ### Execução:
 * Executando dashboard
