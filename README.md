@@ -91,8 +91,14 @@
     ```
 1. Teste o acesso de outra máquina para o Catalog
     ```
-    psql -h <catalog_ip_address> -p 5432 <catalog_db_name> <catalog_user>
+    psql -h $catalog_ip_address -p 5432 $catalog_db_name $catalog_user
     ```
+    * Exemplo:
+        ```
+        psql -h localhost -p 5432 catalog_db_name catalog_user
+        ```
+
+
 
 -------------------------------------------------------------------
 ## [Archiver](https://github.com/ufcg-lsd/saps-archiver)
@@ -153,6 +159,7 @@
   * Mude o DocumentRoot para o diretorio do nfs (default = /nfs)
     ```
     DocumentRoot $nfs_server_folder_path 
+    # Exemplo: DocumentRoot /nfs
     ```
 
 * Modifique o arquivo sites-available/000-default.conf
@@ -162,8 +169,10 @@
   * Mude o DocumentRoot e adicione as linhas em sequencia
     ```
     DocumentRoot $nfs_server_folder_path 
+    # Exemplo: DocumentRoot /nfs
             Options +Indexes
             <Directory $nfs_server_folder_path>
+            # Exemplo: <Directory /nfs>
                     Options Indexes FollowSymLinks
                     AllowOverride None
                     Require all granted
@@ -549,6 +558,7 @@ cd ~/saps-quality-assurance
 ## [Crontab]
 * catalog -> crontab do script de sumarização
   ```
+  * * 1,15 * * sudo bash /home/ubuntu/saps-catalog/scripts/fetch_landsat_data.sh
   0 0 * * * bash /home/ubuntu/saps-catalog/scripts/build_tasks_overview.sh
   ```
 
@@ -559,7 +569,7 @@ cd ~/saps-quality-assurance
 
 * dispatcher -> crontab do script de acessos + scripts de sumarização_manel
   ```
-  59 23 * * * sudo /bin/bash ~/saps-dispatcher/logs/login_counter.sh 
+  59 23 * * * sudo bash /home/ubuntu/saps-dispatcher/scripts/login_counter.sh
   0 0 * * * sudo /bin/bash ~/saps-dispatcher/stats/stats_archived.sh > ~/saps-dispatcher/scripts/summary.csv 
   0 0 * * * sudo /bin/bash ~/saps-dispatcher/stats/logins_accumulator.sh >> ~/saps-dispatcher/scripts/summary.csv
   0 0 * * * sudo python3 ~/saps-dispatcher/stats/stats_tasks_raw_data.py
