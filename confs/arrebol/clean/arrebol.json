@@ -3,7 +3,7 @@
       "properties": [
         {
           "key":"workerPoolSize",
-          "value": 3
+          "value": 1
         },
         {
           "key": "imageId",
@@ -11,7 +11,7 @@
         },
         {
           "key": "resourceAddresses",
-          "value": ["http://10.11.19.104:5555" ]
+          "value": ["http://127.0.0.1:5555" ]
         }
     ]
   }

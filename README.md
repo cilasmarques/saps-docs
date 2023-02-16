@@ -11,9 +11,7 @@
 1. [Dashboard](#dashboard)
 1. [Arrebol](#arrebol)
     1. [Clean Option](#clean-option)
-    1. [Container Option](#container-option)
 1. [Workers](#workers)
-1. [Atachando volume ao nfs](#atachando-volume)
 1. [Testes NOP](#testes-nop)
 1. [Crontab](#crontab)
 1. [Logrotate](#logrotate)
@@ -79,7 +77,8 @@
     psql -c "GRANT ALL PRIVILEGES ON DATABASE $catalog_db_name TO $catalog_user;"
     exit
     ```
-1. Configure o PostgreSQL
+1. Adicione a senha como exigencia para acesso ao PostgreSQL 
+    * Esse passo irá fazer com que qualquer usuário cadastrado no postgresql precise de uma senha para acessar o banco de dados
     ```
     sudo su
     export installed_version=`ls /etc/postgresql`
@@ -89,18 +88,25 @@
     service postgresql restart
     exit
     ```
-1. Teste o acesso de outra máquina para o Catalog
+1. Teste o acesso do Catalog
     ```
-    psql -h $catalog_ip_address -p 5432 $catalog_db_name $catalog_user
+    psql -h <catalog_ip_address> -p 5432 $catalog_db_name $catalog_user
     ```
     * Exemplo:
         ```
         psql -h localhost -p 5432 catalog_db_name catalog_user
         ```
 
-
+### Configuração:
+* Execute o script **/scripts/fetch_landsat_data.sh** (ele demora um pouco)
+```
+cd ~/saps-catalog/scripts
+sudo bash fetch_landsat_data.sh
+```
 
 -------------------------------------------------------------------
+
+
 ## [Archiver](https://github.com/ufcg-lsd/saps-archiver)
 ### Variaveis a serem definidas:
 * $nfs_server_folder_path=/nfs
@@ -122,31 +128,14 @@
     cd ~/saps-archiver
     sudo mvn install 
     ```
-4. Configure o servidor
-* NFS (Opção 1)
-    * Configurando
-        ```
-        sudo su
-        apt-get install -y nfs-kernel-server
-        export nfs_server_folder_path=/nfs
-        mkdir -p $nfs_server_folder_path
-        echo $nfs_server_folder_path '*(rw,insecure,no_subtree_check,async,no_root_squash)' >> /etc/exports 
-        exportfs -arvf
-        service nfs-kernel-server enable
-        service nfs-kernel-server restart
-        exit
-        ```
-    * Testando
-        ```
-        showmount -e localhost
-        ```
+4. Configure uma pasta compartilhada
+* Crie uma pasta nfs para armazenar os arquivos de cada etapa de processamento
+```
+    mkdir -p /nfs
+```
 
-* SWIFT (Opção 2)
-    ```
-    TODO
-    ```
-
-5. Configure apache (necessário para acesso aos dados por email)
+5. Configure apache (necessário para acesso aos dados por email) 
+* (Seria legal migrar isso pra nginx)
 * Instale o apache
   ```
   sudo apt-get install -y apache2
@@ -307,25 +296,34 @@ Configure o arquivo **/config/scheduler.conf** de acordo com os outros component
 
 ### Configuração Geral:
 * Configure o host e as portas em [**/backend.config**](./confs/dashboard/clean/backend.config)
-* Configure a rota de callback do checkin EGI em [**/public/services/dasboardService.js**](./confs/dashboard/clean/dasboardService.js) (Linha 80)
-* Configure a urlSapsService e EGISecretKey em [**/public/dashboardApp.js**](./confs/dashboard/clean/dashboardApp.js) (Linhas 52 e 53)
+* Configure a urlSapsService em [**/public/dashboardApp.js**](./confs/dashboard/clean/dashboardApp.js) (Linha 52)
 
 
-### Configuração do OAuth2 do EGI
+### Configuração do OAuth2 do EGI (opcional)
 * O OAuth2 EGI serve para que usuários cadastrados no [EGI](https://aai.egi.eu/registry/auth/login/) possam se autenticar
-* Para habilitar essa funcionalidade é preciso descomentar as linhas 159~162 do **app.js**
-* Os endpoints de redirecionamento variam de acordo com os ambientes (desenvolvimento e produção) e precisam de algumas credenciais do usuário 
-  * (Quem disponibilizou as credenciais pra gente foi o pessoal da europa)
-* O redirecionamento do OAuthEGI precisa ser para um dominio autorizado, dentre eles, temos:
-  * Desenvolvimento: 
-    1. http://localhost:8081/auth-egi-callback
-    1. https://saps-test.lsd.ufcg.edu.br/auth-egi-callback
-  * Produção
-    1. https://saps.vm.fedcloud.eosc-synergy.eu/auth-egi-callback
-* Com isso, é preciso configurar os [endpoints](https://docs.egi.eu/providers/check-in/sp/#endpoints) do check-in EGI no [**/app.js**](./confs/dashboard/clean/app.js) (Linhas 75 ~ 89)
 
-* Caso esteja usando um dominio https, é preciso configurar o certificado SSL e o direcionamento das requisições.
-  * Para isso, configure o nginx e o [certificado](https://certbot.eff.org/) (Siga o exemplo do arquivo **/nginx/default**)
+
+1. **app.js**
+  * É preciso configurar os [endpoints](https://docs.egi.eu/providers/check-in/sp/#endpoints) do check-in EGI no [**/app.js**](./confs/dashboard/clean/app.js) (Linhas 75 ~ 89)
+  * Os endpoints de redirecionamento variam de acordo com os ambientes (desenvolvimento e produção) e precisam de algumas credenciais do usuário 
+    * (Quem disponibilizou as credenciais pra gente foi o pessoal da europa)
+    * Em ambiente de produção é preciso descomentar as linhas 159~162
+
+2. **/public/dashboardApp.js**
+  * Configure a EGISecretKey em [**/public/dashboardApp.js**](./confs/dashboard/clean/dashboardApp.js) (Linha 53)
+
+3. **/public/services/dasboardService.js**
+  * Configure a rota de callback do checkin EGI 
+    * O redirecionamento do OAuthEGI precisa ser para um dominio autorizado, dentre eles, temos:
+    * Desenvolvimento: 
+      1. http://localhost:8081/auth-egi-callback
+      1. https://saps-test.lsd.ufcg.edu.br/auth-egi-callback
+    * Produção
+      1. https://saps.vm.fedcloud.eosc-synergy.eu/auth-egi-callback
+
+4. Observações
+  * Caso esteja usando um dominio https, é preciso configurar o certificado SSL e o direcionamento das requisições.
+    * Para isso, configure o nginx e o [certificado](https://certbot.eff.org/) (Siga o exemplo do arquivo **/nginx/default**)
 
 ### Execução:
 * Executando dashboard
@@ -344,6 +342,7 @@ Configure o arquivo **/config/scheduler.conf** de acordo com os outros component
 ### Variaveis a serem definidas:
 * $arrebol_db_passwd=@rrebol
 * $arrebol_db_name=arrebol
+* $arrebol_db_user=arrebol_db_user
 
 ### Instalação:
 1. Instale o JDK, Maven e Git
@@ -354,31 +353,65 @@ Configure o arquivo **/config/scheduler.conf** de acordo com os outros component
     sudo apt-get -y install git
     sudo apt-get install -y postgresql
     ```
-2. Instale o ansible 
+1. Instale o ansible 
     ```
     sudo apt update
     sudo apt install --y software-properties-common
     sudo apt-add-repository --yes --update ppa:ansible/ansible
     sudo apt install -y ansible
     ```
-3. Clone e instale as dependencias
+1. Clone e instale as dependencias
     ```
     git clone -b develop https://github.com/cilasmarques/arrebol ~/arrebol
     cd ~/arrebol
     sudo mvn install
     ```
-4. Configure o BD do arrebol
+1. Configure o BD do arrebol
     ``` 
     sudo su postgres
+    export arrebol_db_user=arrebol_db_user
     export arrebol_db_passwd=@rrebol
     export arrebol_db_name=arrebol 
-    psql -c "ALTER USER postgres PASSWORD '$arrebol_db_passwd';"
-    psql -c "CREATE DATABASE $arrebol_db_name OWNER postgres;"
+    psql -c "CREATE USER $arrebol_db_user WITH PASSWORD '$arrebol_db_passwd';"
+    psql -c "CREATE DATABASE $arrebol_db_name OWNER $arrebol_db_user;"
+    psql -c "ALTER USER $arrebol_db_user PASSWORD '$arrebol_db_passwd';"
     exit
     ```
-5. Redefina as Constraints do BD
+
+1. Teste o acesso do bd do arrebol
     ```
-    psql -h <arrebol_ip> -p 5432 arrebol postgres
+    psql -h <arrebol_ip_address> -p 5432 $arrebol_db_name arrebol_db_user
+    ```
+    * Exemplo:
+        ```
+        psql -h localhost -p 5432 arrebol arrebol_db_user
+        ```
+
+
+### Configuração:
+Configure os arquivos **src/main/resources/application.properties** e **src/main/resources/arrebol.json** de acordo com os outros componentes
+* Exemplo: [application.properties](./confs/arrebol/clean/application.properties) 
+* Exemplo: [arrebol.json](./confs/arrebol/clean/arrebol.json) 
+
+### Antes de executar, configure os workers do arrebol 
+* Essa configuração deve ser feita na **mesma máquina que executará** o arrebol**.
+* Para configurar o worker, siga esses [passos](#workers)
+
+### Execução:
+* Executando arrebol
+    ```
+    sudo bash bin/start-service.sh
+    ```
+
+* Parando arrebol
+    ```
+    sudo bash bin/stop-service.sh
+    ```
+
+### Configuração das tabelas do arrebol_db
+1. Após a execução do arrebol, são criadas as tabelas no bd, com isso é preciso adicionar as seguintes constraints
+    ```
+    psql -h localhost -p 5432 arrebol postgres
     ALTER TABLE task_spec_commands DROP CONSTRAINT fk7j4vqu34tq49sh0hltl02wtlv;
     ALTER TABLE task_spec_commands ADD CONSTRAINT commands_id_fk FOREIGN KEY (commands_id) REFERENCES command(id) ON DELETE CASCADE;
 
@@ -392,27 +425,6 @@ Configure o arquivo **/config/scheduler.conf** de acordo com os outros component
     ALTER TABLE task ADD CONSTRAINT task_spec_id_fk FOREIGN KEY (task_spec_id) REFERENCES task_spec(id) ON DELETE CASCADE;
     ```
 
-
-### Configuração:
-Configure os arquivos **src/main/resources/application.properties** e **src/main/resources/arrebol.json** de acordo com os outros componentes
-* Exemplo: [application.properties](./confs/arrebol/clean/application.properties) 
-* Exemplo: [arrebol.json](./confs/arrebol/clean/arrebol.json) 
-
-### Antes de executar, configure os workers do arrebol 
-* Essa configuração deve ser feita na **mesma máquina que executará** o arrebol**.
-* Para configurar o worker, siga esses [passos](#-workers)
-
-### Execução:
-* Executando arrebol
-    ```
-    sudo bash bin/start-service.sh
-    ```
-
-* Parando arrebol
-    ```
-    sudo bash bin/stop-service.sh
-    ```
-
 ### Checagem
 * Requisição
     ```
@@ -423,128 +435,57 @@ Configure os arquivos **src/main/resources/application.properties** e **src/main
     {"id":"default","name":"Default Queue","waiting_jobs":0,"worker_pools":1,"pools_size":5}
     ```
 
-
--------------------------------------------------------------------
-### ***Container Option***
-
-### Instalação:
-1. Clone o repositório
-    ```
-    git clone -b develop https://github.com/cilasmarques/arrebol ~/arrebol
-    ```
-2. Instale as dependencias do docker
-    ```
-    cd arrebol/deploy
-    sudo bash setup.sh
-    ```
-
-### Configuração:
-Configure os arquivos da pasta **deploy/config/** de acordo com os outros componentes
-* Exemplo: [postgres.env](./confs/arrebol/container/postgres.env) 
-* Exemplo: [pgadmin.env](./confs/arrebol/container/pgadmin.env) 
-* Exemplo: [application.properties](./confs/arrebol/container/application.properties) 
-* Exemplo: [arrebol.json](./confs/arrebol/container/arrebol.json) 
-* Exemplo: [init.sql](./confs/arrebol/container/init.sql) 
-
-
-### Antes de executar, configure os workers do arrebol 
-* Essa configuração deve ser feita na **mesma máquina que executará** o arrebol**.
-* Para configurar o worker, siga esses [passos](#-workers)
-
-### Execução:
-* Executando arrebol
-    ```
-    sudo bash deploy.sh start
-    ```
-
-* Parando arrebol
-    ```
-    sudo bash deploy.sh stop
-    ```
-
-### Checagem
-* Requisição
-    ```
-    curl http://<arrebol_ip>:8080/queues/default
-    ```
-* Resposta esperada
-    ```
-    {"id":"default","name":"Default Queue","waiting_jobs":0,"worker_pools":1,"pools_size":5}
-    ```
-
 -------------------------------------------------------------------
 ## Workers
 ### Configuração:
-Configure os arquivos da pasta **/worker/deploy/hosts.conf ** de acordo com os outros componentes
-* Exemplo:
+1. Instale Docker
     ```
-    # worker_ip[anything]
-    worker_ip_1=10.11.19.104
-
-    remote_user=ubuntu
-
-    # The NFS Server Address
-    nfs_server=10.11.19.80
-
-    # The NFS Server directory to mount
-    nfs_server_dir=/nfs
-
-    # Required (if not specified, ansible will use the host ssh keys)
-    ansible_ssh_private_key_file=/home/ubuntu/keys/saps22
+    sudo apt-get update
+    sudo apt-get install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    sudo apt-key fingerprint 0EBFCD88
+    sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    sudo apt-get update
+    sudo apt-get install -y docker-ce docker-ce-cli containerd.io
     ```
 
-### Instalação:
-```
-cd ~/arrebol/worker/deploy/
-sudo bash install.sh
-```
+### Configurando worker para arrebol
+* Modifique o arquivo /lib/systemd/system/docker.service
+  ```
+  sudo vim /lib/systemd/system/docker.service
+  ```
+  * Mude o ExecStart e substitua pelas seguintes linhas 
+    ```
+      ExecStart=/usr/bin/dockerd -H fd:// -H=tcp://0.0.0.0:5555 --containerd=/run/containerd/containerd.sock
+    ```
+
+* Reinicie o deamon e o docker
+  ```
+    sudo systemctl daemon-reload
+    sudo service docker restart
+  ```
+
+* Faça pull imagens dockers
+  ```
+    sudo docker pull fogbow/inputdownloader:googleapis
+    sudo docker pull fogbow/preprocessor:default
+    sudo docker pull fogbow/worker:ufcg-sebal
+
+    sudo docker pull fogbow/inputdownloader:usgsapis
+    sudo docker pull fogbow/preprocessor:legacy
+    sudo docker pull fogbow/worker:sebkc-sebal
+    sudo docker pull fogbow/worker:sebkc-tseb
+  ```
 
 ### Checagem
 * Requisição
     ```
-    curl http://<worker_ip>:5555/version
+    curl http://127.0.0.1:5555/version
     ```
 * Resposta esperada
     ```
     {"id":"default","name":"Default Queue","waiting_jobs":0,"worker_pools":1,"pools_size":5}
     ```
-
--------------------------------------------------------------------
-## Atachando volume
-### Volume menor que 2TB
-1. Crie uma patição no volume
-    * Comando: ```fdisk <volume>```
-    * Exemplo: ```fdisk /dev/sdb```
-1. Verifique se a partição foi feita
-    * Comando: ```lsblk```
-1. Defina um tipo de formatação para a partição
-    * Comando: ```mkfs --type <formato> <particao>```
-    * Exemplo: ``` mkfs --type ext4 /dev/sdb1```
-1. Monte a partição em um diretorio: 
-    * Comando: ```mount <particao> <diretorio>```
-    * Exemplo: ```mount /dev/sdb1 /nfs```
-
-### Volume maior que 2TB
-1. Crie uma patição no volume
-    * Comando: ```parted <volume>```
-    * Exemplo: ```parted /dev/sdb```
-1. Crie uma label
-    * Comando: ```mklabel gpt```
-1. Defina a unidade de armazenamento
-    * Comando: ```unit TB```
-1. Informa o tamanho do armazenamento
-    * Comando: ```mkpart primary <init>TB <limit>TB```
-    * Exemplo: ```mkpart primary 0.00TB 2.00TB```
-1. Verifique se a partição foi feita e salve
-    * Comando: ```print```
-    * Comando: ```quit```
-1. Defina um tipo de formatação para a partição
-    * Comando: ```sudo mkfs.ext4 <volume>```
-    * Comando: ```sudo mkfs.ext4 /dev/sdb1```
-1. Monte a partição em um diretorio: 
-    * Comando: ```mount <particao> <diretorio>```
-    * Exemplo: ```mount /dev/sdb1 /nfs```
-
 
 -------------------------------------------------------------------
 ## Testes NOP

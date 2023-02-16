@@ -1,5 +1,5 @@
 app.constant("appConfig", {
-  "urlSapsService": "http://10.11.19.41:8091/", //url do saps-dipatcher
+  "urlSapsService": "http://127.0.0.1:8091/",   //url e porta do saps-dipatcher
   "EGISecretKey": "<user_egi_secret_key>",      //a mesma senha definida em saps-dipatcher/config/dispatcher.conf
   "authPath": "users?auth",
   "authCreatePath": "users?register",
