@@ -11,7 +11,10 @@
 1. [Dashboard](#dashboard)
 1. [Arrebol](#arrebol)
     1. [Clean Option](#clean-option)
+    1. [Container Option](#container-option)
 1. [Workers](#workers)
+    1. [Raw Option](#raw-option)
+    1. [Ansible Option](#ansible-option)
 1. [Testes NOP](#testes-nop)
 1. [Crontab](#crontab)
 1. [Logrotate](#logrotate)
@@ -105,8 +108,6 @@ sudo bash fetch_landsat_data.sh
 ```
 
 -------------------------------------------------------------------
-
-
 ## [Archiver](https://github.com/ufcg-lsd/saps-archiver)
 ### Variaveis a serem definidas:
 * $nfs_server_folder_path=/nfs
@@ -128,11 +129,30 @@ sudo bash fetch_landsat_data.sh
     cd ~/saps-archiver
     sudo mvn install 
     ```
-4. Configure uma pasta compartilhada
-* Crie uma pasta nfs para armazenar os arquivos de cada etapa de processamento
-```
-    mkdir -p /nfs
-```
+4. Crie e configure uma pasta compartilhada para armazenar os arquivos de cada etapa de processamento
+* NFS (Opção 1)
+    * Configurando
+    ```
+    sudo su
+    apt-get install -y nfs-kernel-server
+    export nfs_server_folder_path=/nfs
+    mkdir -p $nfs_server_folder_path
+    echo $nfs_server_folder_path '*(rw,insecure,no_subtree_check,async,no_root_squash)' >> /etc/exports 
+    exportfs -arvf
+    service nfs-kernel-server enable
+    service nfs-kernel-server restart
+    exit
+    ```
+
+    * Testando
+    ```
+    showmount -e localhost
+    ```
+
+* SWIFT (Opção 2)
+    ```
+    TODO
+    ```
 
 5. Configure apache (necessário para acesso aos dados por email) 
 * (Seria legal migrar isso pra nginx)
@@ -167,7 +187,6 @@ sudo bash fetch_landsat_data.sh
                     Require all granted
             </Directory>
     ```
-
 
 * Modifique o arquivo sites-available/000-default.conf
   ```
@@ -298,10 +317,8 @@ Configure o arquivo **/config/scheduler.conf** de acordo com os outros component
 * Configure o host e as portas em [**/backend.config**](./confs/dashboard/clean/backend.config)
 * Configure a urlSapsService em [**/public/dashboardApp.js**](./confs/dashboard/clean/dashboardApp.js) (Linha 52)
 
-
 ### Configuração do OAuth2 do EGI (opcional)
 * O OAuth2 EGI serve para que usuários cadastrados no [EGI](https://aai.egi.eu/registry/auth/login/) possam se autenticar
-
 
 1. **app.js**
   * É preciso configurar os [endpoints](https://docs.egi.eu/providers/check-in/sp/#endpoints) do check-in EGI no [**/app.js**](./confs/dashboard/clean/app.js) (Linhas 75 ~ 89)
@@ -428,7 +445,53 @@ Configure os arquivos **src/main/resources/application.properties** e **src/main
 ### Checagem
 * Requisição
     ```
-    curl http://127.0.0.1:8080/queues/default
+    curl http://<arrebol_ip>:8080/queues/default
+    ```
+* Resposta esperada
+    ```
+    {"id":"default","name":"Default Queue","waiting_jobs":0,"worker_pools":1,"pools_size":5}
+    ```
+
+-------------------------------------------------------------------
+### ***Container Option***
+### Instalação:
+1. Clone o repositório
+    ```
+    git clone -b develop https://github.com/cilasmarques/arrebol ~/arrebol
+    ```
+2. Instale as dependencias do docker
+    ```
+    cd arrebol/deploy
+    sudo bash setup.sh
+    ```
+
+### Configuração:
+Configure os arquivos da pasta **deploy/config/** de acordo com os outros componentes
+* Exemplo: [postgres.env](./confs/arrebol/container/postgres.env) 
+* Exemplo: [pgadmin.env](./confs/arrebol/container/pgadmin.env) 
+* Exemplo: [application.properties](./confs/arrebol/container/application.properties) 
+* Exemplo: [arrebol.json](./confs/arrebol/container/arrebol.json) 
+* Exemplo: [init.sql](./confs/arrebol/container/init.sql) 
+
+### Antes de executar, configure os workers do arrebol 
+* Essa configuração deve ser feita na **mesma máquina que executará** o arrebol**.
+* Para configurar o worker, siga esses [passos](#workers)
+
+### Execução:
+* Executando arrebol
+    ```
+    sudo bash deploy.sh start
+    ```
+
+* Parando arrebol
+    ```
+    sudo bash deploy.sh stop
+    ```
+
+### Checagem
+* Requisição
+    ```
+    curl http://<arrebol_ip>:8080/queues/default
     ```
 * Resposta esperada
     ```
@@ -437,6 +500,7 @@ Configure os arquivos **src/main/resources/application.properties** e **src/main
 
 -------------------------------------------------------------------
 ## Workers
+### ***Raw Option***
 ### Configuração:
 1. Instale Docker
     ```
@@ -480,12 +544,85 @@ Configure os arquivos **src/main/resources/application.properties** e **src/main
 ### Checagem
 * Requisição
     ```
-    curl http://127.0.0.1:5555/version
+    curl http://<worker_ip>:5555/version
     ```
 * Resposta esperada
     ```
     {"id":"default","name":"Default Queue","waiting_jobs":0,"worker_pools":1,"pools_size":5}
     ```
+
+-------------------------------------------------------------------
+### ***Ansible Option***
+### Configuração:
+Configure os arquivos da pasta **/worker/deploy/hosts.conf ** de acordo com os outros componentes
+* Exemplo:
+    ```
+    # worker_ip[anything]
+    worker_ip_1=10.11.19.104
+
+    remote_user=ubuntu
+
+    # The NFS Server Address
+    nfs_server=10.11.19.80
+
+    # The NFS Server directory to mount
+    nfs_server_dir=/nfs
+
+    # Required (if not specified, ansible will use the host ssh keys)
+    ansible_ssh_private_key_file=/home/ubuntu/keys/saps22
+    ```
+
+### Instalação:
+```
+cd ~/arrebol/worker/deploy/
+sudo bash install.sh
+```
+
+### Checagem
+* Requisição
+    ```
+    curl http://<worker_ip>:5555/version
+    ```
+* Resposta esperada
+    ```
+    {"id":"default","name":"Default Queue","waiting_jobs":0,"worker_pools":1,"pools_size":5}
+    ```
+
+------------------------------------------------------------------
+## Atachando volume
+### Volume menor que 2TB
+1. Crie uma patição no volume
+    * Comando: ```fdisk <volume>```
+    * Exemplo: ```fdisk /dev/sdb```
+1. Verifique se a partição foi feita
+    * Comando: ```lsblk```
+1. Defina um tipo de formatação para a partição
+    * Comando: ```mkfs --type <formato> <particao>```
+    * Exemplo: ``` mkfs --type ext4 /dev/sdb1```
+1. Monte a partição em um diretorio: 
+    * Comando: ```mount <particao> <diretorio>```
+    * Exemplo: ```mount /dev/sdb1 /nfs```
+
+### Volume maior que 2TB
+1. Crie uma patição no volume
+    * Comando: ```parted <volume>```
+    * Exemplo: ```parted /dev/sdb```
+1. Crie uma label
+    * Comando: ```mklabel gpt```
+1. Defina a unidade de armazenamento
+    * Comando: ```unit TB```
+1. Informa o tamanho do armazenamento
+    * Comando: ```mkpart primary <init>TB <limit>TB```
+    * Exemplo: ```mkpart primary 0.00TB 2.00TB```
+1. Verifique se a partição foi feita e salve
+    * Comando: ```print```
+    * Comando: ```quit```
+1. Defina um tipo de formatação para a partição
+    * Comando: ```sudo mkfs.ext4 <volume>```
+    * Comando: ```sudo mkfs.ext4 /dev/sdb1```
+1. Monte a partição em um diretorio: 
+    * Comando: ```mount <particao> <diretorio>```
+    * Exemplo: ```mount /dev/sdb1 /nfs```
 
 -------------------------------------------------------------------
 ## Testes NOP
