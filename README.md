@@ -490,15 +490,13 @@ Configure os arquivos **src/main/resources/application.properties** e **src/main
 -------------------------------------------------------------------
 ## Testes NOP
 ### Adicione as tags dos testes NOP nas configurações dos seguintes componentes
+* [Tags dos testes nop](./confs/NOPTests/nopTestTags.json)
 1. [Dashboard](#-dashboard)
-    * Arquivo: [dashboardApp.js](https://github.com/ufcg-lsd/saps-dashboard/blob/develop/public/dashboardApp.js)
-    * Exemplo: [dashboardApp.js](./confs/dashboard/clean/dashboardApp.js) 
+    * Arquivo: [dashboardApp.js](https://github.com/ufcg-lsd/saps-dashboard/blob/develop/public/dashboardApp.js) (linha 10 ~ 49)
 1. [Dispatcher](#dispatcher)
     * Arquivo: [execution_script_tags.json](https://github.com/ufcg-lsd/saps-dispatcher/blob/develop/resources/execution_script_tags.json)
-    * Exemplo: [dispatcher.conf](./confs/dispatcher/clean/dispatcher.conf)
 1. [Scheduler](#scheduler)
     * Arquivo: [execution_script_tags.json](https://github.com/ufcg-lsd/saps-scheduler/blob/develop/resources/execution_script_tags.json)
-    * Exemplo: [scheduler.conf](./confs/scheduler/clean/scheduler.conf)
 
 ### Clone o repositório saps-quality-assurance
 ```
@@ -507,8 +505,14 @@ cd ~/saps-quality-assurance
 ```
 
 ### Execute os testes
-* Comando: ```sudo bash bin start-systemtest <admin_email> <admin_password> <dispatcher_ip_addrres> <submission_rest_server_port>```
-* Exemplo: ```sudo bash bin start-systemtest dispatcher_admin_email dispatcher_admin_password 127.0.0.1 8091```
+* Comando: 
+    ```
+    sudo bash bin start-systemtest <admin_email> <admin_password> <dispatcher_ip_addrres> <submission_rest_server_port>
+    ```
+    * Exemplo: 
+        ```
+        sudo bash bin start-systemtest dispatcher_admin_email dispatcher_admin_password 127.0.0.1 8091
+        ```
 
 -------------------------------------------------------------------
 ## [Crontab]

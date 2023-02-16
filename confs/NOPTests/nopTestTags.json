@@ -1,0 +1,119 @@
+{
+  "inputdownloading":[
+    {
+      "name":"usgsapis",
+      "docker_tag":"usgsapis",
+      "docker_repository":"fogbow/inputdownloader",
+      "memory_usage":"12G",
+      "cpu_usage":"1000m"
+    },{
+      "name":"googleapis",
+      "docker_tag":"googleapis",
+      "docker_repository":"fogbow/inputdownloader",
+      "memory_usage":"12G",
+      "cpu_usage":"1000m"
+    },{
+      "name":"nop",
+      "docker_tag":"nop",
+      "docker_repository":"fogbow/inputdownloader",
+      "memory_usage":"16G",
+      "cpu_usage":"1000m"
+    },{
+      "name":"nop-fake-files",
+      "docker_tag":"nop-fake-files",
+      "docker_repository":"fogbow/inputdownloader",
+      "memory_usage":"16G",
+      "cpu_usage":"1000m"
+    },{
+      "name":"nop-download-files",
+      "docker_tag":"nop-download-files",
+      "docker_repository":"fogbow/inputdownloader",
+      "memory_usage":"16G",
+      "cpu_usage":"1000m"
+    },{
+      "name": "endtoend-test",
+      "docker_tag": "endtoend-test",
+      "docker_repository": "fogbow/inputdownloader",
+      "memory_usage":"16G",
+      "cpu_usage":"1000m"
+    }
+  ],
+  "preprocessing":[
+    {
+      "name":"default",
+      "docker_tag":"default",
+      "docker_repository":"fogbow/preprocessor",
+      "memory_usage":"12G",
+      "cpu_usage":"1000m"
+    },{
+      "name":"legacy",
+      "docker_tag":"legacy",
+      "docker_repository":"fogbow/preprocessor",
+      "memory_usage":"12G",
+      "cpu_usage":"1000m"
+    },{
+      "name":"nop",
+      "docker_tag":"nop",
+      "docker_repository":"fogbow/preprocessor",
+      "memory_usage":"16G",
+      "cpu_usage":"1000m"
+    },{
+      "name":"nop-fake-files",
+      "docker_tag":"nop-fake-files",
+      "docker_repository":"fogbow/preprocessor",
+      "memory_usage":"16G",
+      "cpu_usage":"1000m"
+    },{
+      "name":"nop-download-files",
+      "docker_tag":"nop-download-files",
+      "docker_repository":"fogbow/preprocessor",
+      "memory_usage":"16G",
+      "cpu_usage":"1000m"
+    },{
+      "name": "endtoend-test",
+      "docker_tag": "endtoend-test",
+      "docker_repository": "fogbow/preprocessor",
+      "memory_usage":"16G",
+      "cpu_usage":"1000m"
+    }
+  ],
+  "processing":[
+    {
+      "name":"ufcg-sebal",
+      "docker_tag":"ufcg-sebal",
+      "docker_repository":"fogbow/worker",
+      "memory_usage":"12G",
+      "cpu_usage":"1000m"
+    },{
+      "name":"sebkc-sebal",
+      "docker_tag":"sebkc-sebal",
+      "docker_repository":"fogbow/worker",
+      "memory_usage":"12G",
+      "cpu_usage":"1000m"
+    },{
+      "name":"nop",
+      "docker_tag":"nop",
+      "docker_repository":"fogbow/worker",
+      "memory_usage":"16G",
+      "cpu_usage":"1000m"
+    },{
+      "name":"nop-fake-files",
+      "docker_tag":"nop-fake-files",
+      "docker_repository":"fogbow/worker",
+      "memory_usage":"16G",
+      "cpu_usage":"1000m"
+    },{
+      "name":"nop-download-files",
+      "docker_tag":"nop-download-files",
+      "docker_repository":"fogbow/worker",
+      "memory_usage":"16G",
+      "cpu_usage":"1000m"
+    },{
+      "name": "endtoend-test",
+      "docker_tag": "endtoend-test",
+      "docker_repository": "fogbow/worker",
+      "memory_usage":"16G",
+      "cpu_usage":"1000m"
+    }
+  ]
+};
