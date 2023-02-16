@@ -16,9 +16,9 @@
     1. [Raw Option](#raw-option)
     1. [Ansible Option](#ansible-option)
 1. [Testes NOP](#testes-nop)
+1. [Atachando volume ao nfs](#atachando-volume)
 1. [Crontab](#crontab)
 1. [Logrotate](#logrotate)
-
 
 -------------------------------------------------------------------
 ## [Common](https://github.com/ufcg-lsd/saps-common)
@@ -130,6 +130,7 @@ sudo bash fetch_landsat_data.sh
     sudo mvn install 
     ```
 4. Crie e configure uma pasta compartilhada para armazenar os arquivos de cada etapa de processamento
+* **OBS:** Caso o espaço para armazenamento seja pequeno, você pode [atachar um volume ao nfs](#atachando-volume)
 * NFS (Opção 1)
     * Configurando
     ```
@@ -588,8 +589,40 @@ sudo bash install.sh
     {"id":"default","name":"Default Queue","waiting_jobs":0,"worker_pools":1,"pools_size":5}
     ```
 
+-------------------------------------------------------------------
+## Testes NOP
+* Para testar o sistema, você pode utilizar os testes NOP
+* Existem varias variações do teste e você pode escolher qual executar pelo arquivo:  **saps-quality-assurance/start-systemtest**
+
+### Adicione as tags dos testes NOP nas configurações dos seguintes componentes
+* [Tags dos testes nop](./confs/NOPTests/nopTestTags.json)
+1. [Dashboard](#-dashboard)
+    * Arquivo: [dashboardApp.js](https://github.com/ufcg-lsd/saps-dashboard/blob/develop/public/dashboardApp.js) (linha 10 ~ 49)
+1. [Dispatcher](#dispatcher)
+    * Arquivo: [execution_script_tags.json](https://github.com/ufcg-lsd/saps-dispatcher/blob/develop/resources/execution_script_tags.json)
+1. [Scheduler](#scheduler)
+    * Arquivo: [execution_script_tags.json](https://github.com/ufcg-lsd/saps-scheduler/blob/develop/resources/execution_script_tags.json)
+
+### Clone o repositório saps-quality-assurance
+```
+git clone -b https://github.com/ufcg-lsd/saps-quality-assurance ~/saps-quality-assurance
+cd ~/saps-quality-assurance
+```
+
+### Execute os testes
+* Comando: 
+    ```
+    sudo bash bin start-systemtest <admin_email> <admin_password> <dispatcher_ip_addrres> <submission_rest_server_port>
+    ```
+    * Exemplo: 
+        ```
+        sudo bash bin start-systemtest dispatcher_admin_email dispatcher_admin_password 127.0.0.1 8091
+        ```
+
 ------------------------------------------------------------------
 ## Atachando volume
+* Atachar um volume é útil para expandir o espaço de armazenamento de uma pasta (tipo um hd externo)
+
 ### Volume menor que 2TB
 1. Crie uma patição no volume
     * Comando: ```fdisk <volume>```
@@ -623,33 +656,6 @@ sudo bash install.sh
 1. Monte a partição em um diretorio: 
     * Comando: ```mount <particao> <diretorio>```
     * Exemplo: ```mount /dev/sdb1 /nfs```
-
--------------------------------------------------------------------
-## Testes NOP
-### Adicione as tags dos testes NOP nas configurações dos seguintes componentes
-* [Tags dos testes nop](./confs/NOPTests/nopTestTags.json)
-1. [Dashboard](#-dashboard)
-    * Arquivo: [dashboardApp.js](https://github.com/ufcg-lsd/saps-dashboard/blob/develop/public/dashboardApp.js) (linha 10 ~ 49)
-1. [Dispatcher](#dispatcher)
-    * Arquivo: [execution_script_tags.json](https://github.com/ufcg-lsd/saps-dispatcher/blob/develop/resources/execution_script_tags.json)
-1. [Scheduler](#scheduler)
-    * Arquivo: [execution_script_tags.json](https://github.com/ufcg-lsd/saps-scheduler/blob/develop/resources/execution_script_tags.json)
-
-### Clone o repositório saps-quality-assurance
-```
-git clone -b https://github.com/ufcg-lsd/saps-quality-assurance ~/saps-quality-assurance
-cd ~/saps-quality-assurance
-```
-
-### Execute os testes
-* Comando: 
-    ```
-    sudo bash bin start-systemtest <admin_email> <admin_password> <dispatcher_ip_addrres> <submission_rest_server_port>
-    ```
-    * Exemplo: 
-        ```
-        sudo bash bin start-systemtest dispatcher_admin_email dispatcher_admin_password 127.0.0.1 8091
-        ```
 
 -------------------------------------------------------------------
 ## [Crontab]
