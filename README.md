@@ -353,13 +353,7 @@ Configure o arquivo **/config/scheduler.conf** de acordo com os outros component
     sudo apt-get -y install git
     sudo apt-get install -y postgresql
     ```
-1. Instale o ansible 
-    ```
-    sudo apt update
-    sudo apt install --y software-properties-common
-    sudo apt-add-repository --yes --update ppa:ansible/ansible
-    sudo apt install -y ansible
-    ```
+
 1. Clone e instale as dependencias
     ```
     git clone -b develop https://github.com/cilasmarques/arrebol ~/arrebol
