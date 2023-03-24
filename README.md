@@ -371,13 +371,6 @@ Configure o arquivo **/config/scheduler.conf** de acordo com os outros component
     sudo apt-get -y install git
     sudo apt-get install -y postgresql
     ```
-1. Instale o ansible 
-    ```
-    sudo apt update
-    sudo apt install --y software-properties-common
-    sudo apt-add-repository --yes --update ppa:ansible/ansible
-    sudo apt install -y ansible
-    ```
 1. Clone e instale as dependencias
     ```
     git clone -b develop https://github.com/cilasmarques/arrebol ~/arrebol
@@ -549,7 +542,58 @@ Configure os arquivos da pasta **deploy/config/** de acordo com os outros compon
     ```
 * Resposta esperada
     ```
-    {"id":"default","name":"Default Queue","waiting_jobs":0,"worker_pools":1,"pools_size":5}
+    {
+      "Platform": {
+        "Name": "Docker Engine - Community"
+      },
+      "Components": [
+        {
+          "Name": "Engine",
+          "Version": "19.03.7",
+          "Details": {
+            "ApiVersion": "1.40",
+            "Arch": "amd64",
+            "BuildTime": "2020-03-04T01:21:08.000000000+00:00",
+            "Experimental": "false",
+            "GitCommit": "7141c199a2",
+            "GoVersion": "go1.12.17",
+            "KernelVersion": "4.15.0-88-generic",
+            "MinAPIVersion": "1.12",
+            "Os": "linux"
+          }
+        },
+        {
+          "Name": "containerd",
+          "Version": "1.2.13",
+          "Details": {
+            "GitCommit": "7ad184331fa3e55e52b890ea95e65ba581ae3429"
+          }
+        },
+        {
+          "Name": "runc",
+          "Version": "1.0.0-rc10",
+          "Details": {
+            "GitCommit": "dc9208a3303feef5b3839f4323d9beb36df0a9dd"
+          }
+        },
+        {
+          "Name": "docker-init",
+          "Version": "0.18.0",
+          "Details": {
+            "GitCommit": "fec3683"
+          }
+        }
+      ],
+      "Version": "19.03.7",
+      "ApiVersion": "1.40",
+      "MinAPIVersion": "1.12",
+      "GitCommit": "7141c199a2",
+      "GoVersion": "go1.12.17",
+      "Os": "linux",
+      "Arch": "amd64",
+      "KernelVersion": "4.15.0-88-generic",
+      "BuildTime": "2020-03-04T01:21:08.000000000+00:00"
+    }
     ```
 
 -------------------------------------------------------------------
@@ -586,7 +630,58 @@ sudo bash install.sh
     ```
 * Resposta esperada
     ```
-    {"id":"default","name":"Default Queue","waiting_jobs":0,"worker_pools":1,"pools_size":5}
+    {
+      "Platform": {
+        "Name": "Docker Engine - Community"
+      },
+      "Components": [
+        {
+          "Name": "Engine",
+          "Version": "19.03.7",
+          "Details": {
+            "ApiVersion": "1.40",
+            "Arch": "amd64",
+            "BuildTime": "2020-03-04T01:21:08.000000000+00:00",
+            "Experimental": "false",
+            "GitCommit": "7141c199a2",
+            "GoVersion": "go1.12.17",
+            "KernelVersion": "4.15.0-88-generic",
+            "MinAPIVersion": "1.12",
+            "Os": "linux"
+          }
+        },
+        {
+          "Name": "containerd",
+          "Version": "1.2.13",
+          "Details": {
+            "GitCommit": "7ad184331fa3e55e52b890ea95e65ba581ae3429"
+          }
+        },
+        {
+          "Name": "runc",
+          "Version": "1.0.0-rc10",
+          "Details": {
+            "GitCommit": "dc9208a3303feef5b3839f4323d9beb36df0a9dd"
+          }
+        },
+        {
+          "Name": "docker-init",
+          "Version": "0.18.0",
+          "Details": {
+            "GitCommit": "fec3683"
+          }
+        }
+      ],
+      "Version": "19.03.7",
+      "ApiVersion": "1.40",
+      "MinAPIVersion": "1.12",
+      "GitCommit": "7141c199a2",
+      "GoVersion": "go1.12.17",
+      "Os": "linux",
+      "Arch": "amd64",
+      "KernelVersion": "4.15.0-88-generic",
+      "BuildTime": "2020-03-04T01:21:08.000000000+00:00"
+    }
     ```
 
 -------------------------------------------------------------------
@@ -612,11 +707,11 @@ cd ~/saps-quality-assurance
 ### Execute os testes
 * Comando: 
     ```
-    sudo bash bin start-systemtest <admin_email> <admin_password> <dispatcher_ip_addrres> <submission_rest_server_port>
+    sudo bash start-systemtest <admin_email> <admin_password> <dispatcher_ip_addrres> <submission_rest_server_port>
     ```
     * Exemplo: 
         ```
-        sudo bash bin start-systemtest dispatcher_admin_email dispatcher_admin_password 127.0.0.1 8091
+        sudo bash start-systemtest dispatcher_admin_email dispatcher_admin_password 127.0.0.1 8091
         ```
 
 ------------------------------------------------------------------
@@ -661,7 +756,7 @@ cd ~/saps-quality-assurance
 ## [Crontab]
 * catalog -> crontab do script de sumarização
   ```
-  * * 1,15 * * sudo bash /home/ubuntu/saps-catalog/scripts/fetch_landsat_data.sh
+  0 0 1,15 * * sudo bash /home/ubuntu/saps-catalog/scripts/fetch_landsat_data.sh
   0 0 * * * bash /home/ubuntu/saps-catalog/scripts/build_tasks_overview.sh
   ```
 
