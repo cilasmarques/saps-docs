@@ -102,7 +102,7 @@
 
 1. Configure o [Dispatcher](#dispatcher)
     
-    Para rodar o scrip do landsat é necessário que o dispatcher esteja rodando.
+    Para rodar o script do landsat é necessário que o dispatcher esteja rodando.
 
 
 ### Configuração:
