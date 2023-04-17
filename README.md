@@ -100,6 +100,11 @@
         psql -h localhost -p 5432 catalog_db_name catalog_user
         ```
 
+1. Configure o [Dispatcher](#dispatcher)
+    
+    Para rodar o scrip do landsat é necessário que o dispatcher esteja rodando.
+
+
 ### Configuração:
 * Execute o script **/scripts/fetch_landsat_data.sh** (ele demora um pouco)
 ```
