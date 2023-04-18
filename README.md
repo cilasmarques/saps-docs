@@ -1,5 +1,5 @@
 # SAPS
-* Verifique de estar usando Ubuntu 16.04 ou 18.04
+* Requisitos: Ubuntu 16.04 ou 18.04
 
 
 # Componentes SAPS
