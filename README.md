@@ -414,7 +414,7 @@ Configure os arquivos **src/main/resources/application.properties** e **src/main
 * Exemplo: [arrebol.json](./confs/arrebol/clean/arrebol.json) 
 
 ### Antes de executar, configure os workers do arrebol 
-* Essa configuração deve ser feita na **mesma máquina que executará** o arrebol**.
+* Essa configuração deve ser feita na **mesma máquina que executará o arrebol**.
 * Para configurar o worker, siga esses [passos](#workers)
 
 ### Execução:
