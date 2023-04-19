@@ -291,7 +291,11 @@ Configure o arquivo **/config/dispatcher.conf** de acordo com os outros componen
 Configure o arquivo **/config/scheduler.conf** de acordo com os outros componentes
 * Exemplo (nfs): [scheduler.conf](./confs/scheduler/clean/scheduler.conf) 
 
+
 ### Execução:
+
+* Antes da execução é necessário instalar e configurar o [Arrebol](#arrebol)
+
 * Executando scheduler
     ```
     bash bin/start-service
