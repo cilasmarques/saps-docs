@@ -434,7 +434,7 @@ Configure os arquivos **src/main/resources/application.properties** e **src/main
 ### Configuração das tabelas do arrebol_db
 1. Após a execução do arrebol, são criadas as tabelas no bd, com isso é preciso adicionar as seguintes constraints
     ```
-    psql -h localhost -p 5432 arrebol postgres
+    psql -h localhost -p 5432 arrebol arrebol_db_user
     ALTER TABLE task_spec_commands DROP CONSTRAINT fk7j4vqu34tq49sh0hltl02wtlv;
     ALTER TABLE task_spec_commands ADD CONSTRAINT commands_id_fk FOREIGN KEY (commands_id) REFERENCES command(id) ON DELETE CASCADE;
 
