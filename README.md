@@ -371,6 +371,9 @@ Configure o arquivo **/config/scheduler.conf** de acordo com os outros component
 * $arrebol_db_name=arrebol
 * $arrebol_db_user=arrebol_db_user
 
+### Observação:
+   Para evitar conflitos na configuração do Arrebol, é importante que o banco de dados do ***Arrebol*** e do ***Catalog*** sejam armazenados em instâncias diferentes. Caso seja inviável armazená-los em instâncias separadas, uma alternativa é criar um único banco de dados para ambos, garantindo que os dados de cada sistema estejam claramente separados e evitando conflitos. Entretanto, essa opção requer cuidado para evitar conflitos no acesso aos dados.
+
 ### Instalação:
 1. Instale o JDK, Maven e Git
     ```
