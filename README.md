@@ -394,7 +394,7 @@ Configure o arquivo **/config/scheduler.conf** de acordo com os outros component
     sudo su postgres
     export arrebol_db_user=arrebol_db_user
     export arrebol_db_passwd=@rrebol
-    export arrebol_db_name=arrebol 
+    export arrebol_db_name=arrebol
     psql -c "CREATE USER $arrebol_db_user WITH PASSWORD '$arrebol_db_passwd';"
     psql -c "CREATE DATABASE $arrebol_db_name OWNER $arrebol_db_user;"
     psql -c "ALTER USER $arrebol_db_user PASSWORD '$arrebol_db_passwd';"
