@@ -712,7 +712,7 @@ sudo bash install.sh
 
 ### Clone o repositório saps-quality-assurance
 ```
-git clone -b https://github.com/ufcg-lsd/saps-quality-assurance ~/saps-quality-assurance
+git clone https://github.com/ufcg-lsd/saps-quality-assurance ~/saps-quality-assurance
 cd ~/saps-quality-assurance
 ```
 
