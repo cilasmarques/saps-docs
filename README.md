@@ -723,7 +723,7 @@ cd ~/saps-quality-assurance
     ```
     * Exemplo: 
         ```
-        sudo bash start-systemtest dispatcher_admin_email dispatcher_admin_password 127.0.0.1 8091
+        sudo bash start-systemtest dispatcher_admin_email dispatcher_admin_password 127.0.0.1:8091
         ```
 
 ------------------------------------------------------------------
