@@ -1,5 +1,5 @@
 # SAPS
-* Verifique de estar usando Ubuntu 16.04 ou 18.04
+* Requisitos: Ubuntu 16.04 ou 18.04
 
 
 # Componentes SAPS
@@ -99,6 +99,11 @@
         ```
         psql -h localhost -p 5432 catalog_db_name catalog_user
         ```
+
+1. Configure o [Dispatcher](#dispatcher)
+    
+    Para rodar o script do landsat é necessário que o dispatcher esteja rodando.
+
 
 ### Configuração:
 * Execute o script **/scripts/fetch_landsat_data.sh** (ele demora um pouco)
@@ -286,7 +291,11 @@ Configure o arquivo **/config/dispatcher.conf** de acordo com os outros componen
 Configure o arquivo **/config/scheduler.conf** de acordo com os outros componentes
 * Exemplo (nfs): [scheduler.conf](./confs/scheduler/clean/scheduler.conf) 
 
+
 ### Execução:
+
+* Antes da execução é necessário instalar e configurar o [Arrebol](#arrebol)
+
 * Executando scheduler
     ```
     bash bin/start-service
@@ -362,6 +371,9 @@ Configure o arquivo **/config/scheduler.conf** de acordo com os outros component
 * $arrebol_db_name=arrebol
 * $arrebol_db_user=arrebol_db_user
 
+### Observação:
+   Para evitar conflitos na configuração do Arrebol, é importante que o banco de dados do ***Arrebol*** e do ***Catalog*** sejam armazenados em instâncias diferentes. Caso seja inviável armazená-los em instâncias separadas, uma alternativa é criar um único banco de dados para ambos, garantindo que os dados de cada sistema estejam claramente separados. Entretanto, essa opção requer cuidado para evitar conflitos no acesso aos dados.
+
 ### Instalação:
 1. Instale o JDK, Maven e Git
     ```
@@ -382,7 +394,7 @@ Configure o arquivo **/config/scheduler.conf** de acordo com os outros component
     sudo su postgres
     export arrebol_db_user=arrebol_db_user
     export arrebol_db_passwd=@rrebol
-    export arrebol_db_name=arrebol 
+    export arrebol_db_name=arrebol
     psql -c "CREATE USER $arrebol_db_user WITH PASSWORD '$arrebol_db_passwd';"
     psql -c "CREATE DATABASE $arrebol_db_name OWNER $arrebol_db_user;"
     psql -c "ALTER USER $arrebol_db_user PASSWORD '$arrebol_db_passwd';"
@@ -405,7 +417,7 @@ Configure os arquivos **src/main/resources/application.properties** e **src/main
 * Exemplo: [arrebol.json](./confs/arrebol/clean/arrebol.json) 
 
 ### Antes de executar, configure os workers do arrebol 
-* Essa configuração deve ser feita na **mesma máquina que executará** o arrebol**.
+* Essa configuração deve ser feita na **mesma máquina que executará o arrebol**.
 * Para configurar o worker, siga esses [passos](#workers)
 
 ### Execução:
@@ -422,7 +434,7 @@ Configure os arquivos **src/main/resources/application.properties** e **src/main
 ### Configuração das tabelas do arrebol_db
 1. Após a execução do arrebol, são criadas as tabelas no bd, com isso é preciso adicionar as seguintes constraints
     ```
-    psql -h localhost -p 5432 arrebol postgres
+    psql -h localhost -p 5432 arrebol arrebol_db_user
     ALTER TABLE task_spec_commands DROP CONSTRAINT fk7j4vqu34tq49sh0hltl02wtlv;
     ALTER TABLE task_spec_commands ADD CONSTRAINT commands_id_fk FOREIGN KEY (commands_id) REFERENCES command(id) ON DELETE CASCADE;
 
@@ -700,7 +712,7 @@ sudo bash install.sh
 
 ### Clone o repositório saps-quality-assurance
 ```
-git clone -b https://github.com/ufcg-lsd/saps-quality-assurance ~/saps-quality-assurance
+git clone https://github.com/ufcg-lsd/saps-quality-assurance ~/saps-quality-assurance
 cd ~/saps-quality-assurance
 ```
 
@@ -711,7 +723,7 @@ cd ~/saps-quality-assurance
     ```
     * Exemplo: 
         ```
-        sudo bash start-systemtest dispatcher_admin_email dispatcher_admin_password 127.0.0.1 8091
+        sudo bash start-systemtest dispatcher_admin_email dispatcher_admin_password 127.0.0.1:8091
         ```
 
 ------------------------------------------------------------------
