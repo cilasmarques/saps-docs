@@ -712,9 +712,9 @@ sudo bash install.sh
     * Arquivo: [execution_script_tags.json](https://github.com/ufcg-lsd/saps-scheduler/blob/develop/resources/execution_script_tags.json)
 
 
-Após adicionados, execute novamente o build em cada uma das instâncias.
+Após adicionados, execute novamente o build no Scheduler e no Dispatcher.
 
-`sudo mvn install`
+```sudo mvn install```
 
 ### Clone o repositório saps-quality-assurance
 ```
