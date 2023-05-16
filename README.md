@@ -714,7 +714,9 @@ sudo bash install.sh
 
 Após adicionados, execute novamente o build no Scheduler e no Dispatcher.
 
-```sudo mvn install```
+```
+sudo mvn install
+```
 
 ### Clone o repositório saps-quality-assurance
 ```
