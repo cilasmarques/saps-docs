@@ -703,12 +703,18 @@ sudo bash install.sh
 
 ### Adicione as tags dos testes NOP nas configurações dos seguintes componentes
 * [Tags dos testes nop](./confs/NOPTests/nopTestTags.json)
+
 1. [Dashboard](#-dashboard)
     * Arquivo: [dashboardApp.js](https://github.com/ufcg-lsd/saps-dashboard/blob/develop/public/dashboardApp.js) (linha 10 ~ 49)
 1. [Dispatcher](#dispatcher)
     * Arquivo: [execution_script_tags.json](https://github.com/ufcg-lsd/saps-dispatcher/blob/develop/resources/execution_script_tags.json)
 1. [Scheduler](#scheduler)
     * Arquivo: [execution_script_tags.json](https://github.com/ufcg-lsd/saps-scheduler/blob/develop/resources/execution_script_tags.json)
+
+
+Após adicionados, execute novamente o build em cada uma das instâncias.
+
+`sudo mvn install`
 
 ### Clone o repositório saps-quality-assurance
 ```
