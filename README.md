@@ -231,7 +231,17 @@ Configure o arquivo /config/archiver.conf de acordo com os outros componentes
 ## [Dispatcher](https://github.com/ufcg-lsd/saps-dispatcher)
 ### Instalação:
 1. Configure o [saps-common](#common)
-2. Instale as dependencias do [saps-catalog](#catalog)
+
+2.  Instale as dependencias do [saps-archiver](#archiver)
+    ```
+    git clone https://github.com/ufcg-lsd/saps-archiver ~/temp/saps-archiver
+    cd ~/temp/saps-archiver
+    sudo mvn install 
+    cd -
+    sudo rm -rf ~/temp/saps-archiver
+    sudo rm -d ~/temp/
+    ```
+3. Instale as dependencias do [saps-catalog](#catalog)
     ```
     git clone https://github.com/ufcg-lsd/saps-catalog ~/temp/saps-catalog
     cd ~/temp/saps-catalog
@@ -240,13 +250,13 @@ Configure o arquivo /config/archiver.conf de acordo com os outros componentes
     sudo rm -rf ~/temp/saps-catalog
     sudo rm -d ~/temp/
     ```
-3. Clone e instale as dependencias
+4. Clone e instale as dependencias
     ```
     git clone https://github.com/ufcg-lsd/saps-dispatcher ~/saps-dispatcher
     cd ~/saps-dispatcher
     sudo mvn install 
     ```
-4. Instale as dependências do script python (get_wrs.py)
+5. Instale as dependências do script python (get_wrs.py)
     ```
     sudo apt-get install -y python-gdal
     sudo apt-get install -y python-shapely
