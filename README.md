@@ -795,9 +795,4 @@ cd ~/saps-quality-assurance
   0 0 * * *  sudo docker ps -aq | sudo xargs docker stop | sudo xargs docker rm
   ```
 
--------------------------------------------------------------------
-## [Logrotate]
-* [dispatcher](./confs/dispatcher/logrotate.conf) 
-* [scheduler](./confs/scheduler/logrotate.conf)
-* [archiver](./confs/archiver/logrotate.conf)
-* [arrebol](./confs/arrebol/logrotate.conf)
+
