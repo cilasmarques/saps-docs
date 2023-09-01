@@ -231,7 +231,17 @@ Configure o arquivo /config/archiver.conf de acordo com os outros componentes
 ## [Dispatcher](https://github.com/ufcg-lsd/saps-dispatcher)
 ### Instalação:
 1. Configure o [saps-common](#common)
-2. Instale as dependencias do [saps-catalog](#catalog)
+
+2.  Instale as dependencias do [saps-archiver](#archiver)
+    ```
+    git clone https://github.com/ufcg-lsd/saps-archiver ~/temp/saps-archiver
+    cd ~/temp/saps-archiver
+    sudo mvn install 
+    cd -
+    sudo rm -rf ~/temp/saps-archiver
+    sudo rm -d ~/temp/
+    ```
+3. Instale as dependencias do [saps-catalog](#catalog)
     ```
     git clone https://github.com/ufcg-lsd/saps-catalog ~/temp/saps-catalog
     cd ~/temp/saps-catalog
@@ -240,13 +250,13 @@ Configure o arquivo /config/archiver.conf de acordo com os outros componentes
     sudo rm -rf ~/temp/saps-catalog
     sudo rm -d ~/temp/
     ```
-3. Clone e instale as dependencias
+4. Clone e instale as dependencias
     ```
     git clone https://github.com/ufcg-lsd/saps-dispatcher ~/saps-dispatcher
     cd ~/saps-dispatcher
     sudo mvn install 
     ```
-4. Instale as dependências do script python (get_wrs.py)
+5. Instale as dependências do script python (get_wrs.py)
     ```
     sudo apt-get install -y python-gdal
     sudo apt-get install -y python-shapely
@@ -703,12 +713,20 @@ sudo bash install.sh
 
 ### Adicione as tags dos testes NOP nas configurações dos seguintes componentes
 * [Tags dos testes nop](./confs/NOPTests/nopTestTags.json)
+
 1. [Dashboard](#-dashboard)
     * Arquivo: [dashboardApp.js](https://github.com/ufcg-lsd/saps-dashboard/blob/develop/public/dashboardApp.js) (linha 10 ~ 49)
 1. [Dispatcher](#dispatcher)
     * Arquivo: [execution_script_tags.json](https://github.com/ufcg-lsd/saps-dispatcher/blob/develop/resources/execution_script_tags.json)
 1. [Scheduler](#scheduler)
     * Arquivo: [execution_script_tags.json](https://github.com/ufcg-lsd/saps-scheduler/blob/develop/resources/execution_script_tags.json)
+
+
+Após adicionados, execute novamente o build no Scheduler e no Dispatcher.
+
+```
+sudo mvn install
+```
 
 ### Clone o repositório saps-quality-assurance
 ```
