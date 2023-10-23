@@ -318,60 +318,55 @@ Configure o arquivo **/config/scheduler.conf** de acordo com os outros component
 
 -------------------------------------------------------------------
 ## [Dashboard](https://github.com/ufcg-lsd/saps-dashboard)
-### Instalação:
-1. Instale o curl e o nodejs
-    ```
-    sudo apt-get update
-    sudo apt-get install -y curl
-    curl -sL https://deb.nodesource.com/setup_13.x | sudo -E bash -
-    sudo apt-get install -y nodejs
-    ```
-2. Clone e instale as dependencias
-    ```
-    git clone https://github.com/ufcg-lsd/saps-dashboard ~/saps-dashboard
-    cd ~/saps-dashboard
-    npm install
-    ```
 
-### Configuração Geral:
-* Configure o host e as portas em [**/backend.config**](./confs/dashboard/clean/backend.config)
-* Configure a urlSapsService em [**/public/dashboardApp.js**](./confs/dashboard/clean/dashboardApp.js) (Linha 52)
+## Configuração
 
-### Configuração do OAuth2 do EGI (opcional)
-* O OAuth2 EGI serve para que usuários cadastrados no [EGI](https://aai.egi.eu/registry/auth/login/) possam se autenticar
+Para rodar o projeto corretamente, siga os passos abaixo:
 
-1. **app.js**
-  * É preciso configurar os [endpoints](https://docs.egi.eu/providers/check-in/sp/#endpoints) do check-in EGI no [**/app.js**](./confs/dashboard/clean/app.js) (Linhas 75 ~ 89)
-  * Os endpoints de redirecionamento variam de acordo com os ambientes (desenvolvimento e produção) e precisam de algumas credenciais do usuário 
-    * (Quem disponibilizou as credenciais pra gente foi o pessoal da europa)
-    * Em ambiente de produção é preciso descomentar as linhas 159~162
+### 1. Alterando a Porta do Dashboard
 
-2. **/public/dashboardApp.js**
-  * Configure a EGISecretKey em [**/public/dashboardApp.js**](./confs/dashboard/clean/dashboardApp.js) (Linha 53)
+Caso seja necessário, você pode alterar a porta na qual o Dashboard irá rodar (default = 3000). Abaixo o exemplo de como definir a porta como 8081:
 
-3. **/public/services/dasboardService.js**
-  * Configure a rota de callback do checkin EGI 
-    * O redirecionamento do OAuthEGI precisa ser para um dominio autorizado, dentre eles, temos:
-    * Desenvolvimento: 
-      1. http://localhost:8081/auth-egi-callback
-      1. https://saps-test.lsd.ufcg.edu.br/auth-egi-callback
-    * Produção
-      1. https://saps.vm.fedcloud.eosc-synergy.eu/auth-egi-callback
+1. Navegue até o arquivo `saps-dashboard/package.json`.
+2. Localize a parte de scripts e altere a variável `dev` para:
 
-4. Observações
-  * Caso esteja usando um dominio https, é preciso configurar o certificado SSL e o direcionamento das requisições.
-    * Para isso, configure o nginx e o [certificado](https://certbot.eff.org/) (Siga o exemplo do arquivo **/nginx/default**)
+```json
+"dev": "next dev -p 8081"
+```
 
-### Execução:
-* Executando dashboard
-    ```
-    sudo bash bin/start-dashboard
-    ```
+### 2. Gerando o Token para o Mapa
 
-* Parando dashboard
-    ```
-    sudo bash bin/stop-dashboard
-    ```
+1. Acesse [Mapbox](https://www.mapbox.com).
+2. Crie uma conta ou faça login.
+3. Gere um novo token para consumir a API.
+4. Copie esse token e cole no campo `<Seu Token Aqui>` no arquivo `.env.local`.
+
+### 3. Configurando Variáveis de Ambiente
+
+Crie um arquivo chamado `.env.local` na raiz do projeto e adicione as seguintes linhas:
+
+```
+NEXT_PUBLIC_API_URL=<IP:Porta do Dispatcher>
+NEXT_PUBLIC_MAP_API_KEY=<Seu Token Aqui>
+```
+
+### 4. Baixando dependência necessária
+
+instale o AXIOS para que seja possivel realizar as requisições
+
+```
+npm install axios
+```
+
+## Executando o Projeto
+
+Depois de concluir as etapas de configuração, você pode rodar o projeto com os comandos abaixo:
+
+### Usando npm:
+```bash
+npm run dev
+``````
+
 
 -------------------------------------------------------------------
 ## [Arrebol](https://github.com/ufcg-lsd/arrebol) 
