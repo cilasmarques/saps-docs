@@ -321,6 +321,8 @@ Configure o arquivo **/config/scheduler.conf** de acordo com os outros component
 
 ## Configuração
 
+Para rodar o projeto corretamente, siga os passos abaixo:
+
 ### 1. Instale as dependências do Dashboard
 
 ```
@@ -333,8 +335,6 @@ npm install react@latest
 npm install react-dom@latest
 npm install axios
 ```
-
-Para rodar o projeto corretamente, siga os passos abaixo:
 
 ### 2. Alterando a Porta do Dashboard
 
